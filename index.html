@@ -47,6 +47,16 @@
       color: #666;
       margin-top: 4px;
     }
+    .catalog-section-title {
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.8px;
+      color: #495057;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+      border-bottom: 2px solid #e9ecef;
+      padding-bottom: 6px;
+    }
     .catalog {
       display: flex;
       flex-direction: column;
@@ -178,7 +188,6 @@
       justify-content: center;
       gap: 8px;
       transition: background 0.2s ease;
-      text-decoration: none;
     }
     .btn-submit:hover {
       background: #0077b5;
@@ -200,14 +209,18 @@
 <body>
 
   <div class="container">
+    <!-- Header with Logo -->
     <div class="header">
       <img src="logo.png" alt="PapaPepprotide Logo" class="logo" />
       <div class="title">PapaPepprotide</div>
       <div class="subtitle">Select items & checkout directly via Telegram</div>
     </div>
 
+    <!-- Product Catalog Heading & List -->
+    <div class="catalog-section-title">PROTIDE PEPTIDES</div>
     <div class="catalog" id="catalog"></div>
 
+    <!-- Order Summary -->
     <div class="summary-card">
       <div id="summary-items">No items selected</div>
       <div class="total-row">
@@ -216,6 +229,7 @@
       </div>
     </div>
 
+    <!-- Payment & Telegram Checkout -->
     <div class="payment-section">
       <div class="payment-title">Scan to Pay via PayNow</div>
       <div class="qr-container">
@@ -226,16 +240,16 @@
         <strong>How to complete your order:</strong><br/>
         1. Scan PayNow QR code to transfer total amount.<br/>
         2. Take a screenshot of your payment confirmation.<br/>
-        3. Click <strong>Send & CC Order to Telegram</strong> to copy details.<br/>
-        4. Paste your details into the Telegram group along with your payment screenshot.
+        3. Click <strong>Send Order to Telegram</strong> below.<br/>
+        4. Paste your copied order summary into Telegram along with your payment screenshot.
       </div>
 
       <button class="btn-submit" id="submit-btn" onclick="sendOrder()" disabled>
-        Send & CC Order to Telegram
+        Send Order to Telegram
       </button>
 
       <a id="direct-link" href="https://t.me/+PqKUpGSNEWA4NzBl" target="_blank" class="fallback-link" style="display:none;">
-        If Telegram does not open automatically, click here.
+        Click here if Telegram does not open automatically
       </a>
     </div>
   </div>
@@ -310,7 +324,7 @@
     }
 
     function sendOrder() {
-      let orderText = "📦 CC / NEW PREPARATION ORDER - PapaPepprotide\n\n";
+      let orderText = "🛒 NEW ORDER - PapaPepprotide\n\n";
       let total = 0;
 
       products.forEach(p => {
@@ -322,9 +336,8 @@
       });
 
       orderText += `\nTotal Paid: $${total.toFixed(2)}\n\n`;
-      orderText += "Please prepare the items listed above. Payment receipt attached below:";
+      orderText += "Payment receipt attached below:";
 
-      // Copy text first, then force redirection
       if (navigator.clipboard && window.isSecureContext) {
         navigator.clipboard.writeText(orderText).finally(() => {
           redirectToTelegram();
