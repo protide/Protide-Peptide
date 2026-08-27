@@ -51,9 +51,9 @@
             border-bottom: 1px solid var(--border-color);
         }
 
-        .logo-container {
-            width: 100px;
-            height: 100px;
+        .logo {
+            width: 90px;
+            height: 90px;
             margin: 0 auto 15px;
             border-radius: 50%;
             background: #ffffff;
@@ -62,6 +62,13 @@
             justify-content: center;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
             border: 2px solid var(--border-color);
+            overflow: hidden;
+        }
+
+        .logo img {
+            width: 80%;
+            height: 80%;
+            object-fit: contain;
         }
 
         .header h1 {
@@ -242,19 +249,9 @@
 
 <div class="container">
     <div class="header">
-        <div class="logo-container">
-            <!-- Inline SVG Logo for reliable rendering without external file dependencies -->
-            <svg width="75" height="75" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <defs>
-                    <linearGradient id="silver" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" stop-color="#94a3b8" />
-                        <stop offset="50%" stop-color="#cbd5e1" />
-                        <stop offset="100%" stop-color="#475569" />
-                    </linearGradient>
-                </defs>
-                <path d="M50 40 H110 C135 40 155 60 155 85 C155 110 135 130 110 130 H80 V160" stroke="url(#silver)" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"/>
-                <path d="M80 70 H130 C150 70 165 85 165 105 C165 125 150 140 130 140 H100 V170" stroke="url(#silver)" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
+        <div class="logo">
+            <!-- Embedded image file reference -->
+            <img src="logo.png" alt="PROTIDE PEPTIDES Logo" onerror="this.onerror=null; this.src='1000242155.jpg';">
         </div>
         <h1>PROTIDE PEPTIDES</h1>
         <p>Select item quantities below to place your order</p>
@@ -271,7 +268,7 @@
         <div class="payment-box">
             <h3>Scan & Pay via PayNow</h3>
             <div class="qr-code">
-                <img src="paynow.png" alt="PayNow QR Code" onerror="this.onerror=null; this.src='https://via.placeholder.com/180?text=PayNow+QR+Missing';">
+                <img src="paynow.png" alt="PayNow QR Code" onerror="this.onerror=null; this.src='paynow.jpg';">
             </div>
             <p class="payment-instructions">
                 Scan the QR code to complete payment. Click below to send your order details and attach your payment screenshot to <strong>@Papapepprotide</strong> on Telegram.
