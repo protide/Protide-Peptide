@@ -221,7 +221,7 @@
         <strong>How to complete your order:</strong><br/>
         1. Scan PayNow QR code to transfer total amount.<br/>
         2. Take a screenshot of the payment confirmation.<br/>
-        3. Click <strong>Send Order to Telegram</strong> below to open the Telegram group and paste your order details along with your payment screenshot.
+        3. Click <strong>Send Order to Telegram</strong> below to open the Telegram group, then paste your order details and attach your screenshot.
       </div>
 
       <button class="btn-submit" id="submit-btn" onclick="sendOrder()" disabled>
@@ -312,12 +312,10 @@
 
       orderText += `\nTotal Amount: $${total.toFixed(2)}`;
 
-      // Copy formatted text to clipboard automatically
       navigator.clipboard.writeText(orderText).then(() => {
         alert("Order details copied to clipboard! Opening Telegram...");
       }).catch(() => {});
 
-      // Open group link
       window.open("https://t.me/+PqKUpGSNEWA4NzBl", "_blank");
     }
 
