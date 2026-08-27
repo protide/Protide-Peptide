@@ -51,9 +51,10 @@
             border-bottom: 1px solid var(--border-color);
         }
 
+        /* Increased logo container size */
         .logo {
-            width: 90px;
-            height: 90px;
+            width: 130px;
+            height: 130px;
             margin: 0 auto 15px;
             border-radius: 50%;
             background: #ffffff;
@@ -61,13 +62,13 @@
             align-items: center;
             justify-content: center;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
-            border: 2px solid var(--border-color);
+            border: 3px solid var(--border-color);
             overflow: hidden;
         }
 
         .logo img {
-            width: 80%;
-            height: 80%;
+            width: 90%;
+            height: 90%;
             object-fit: contain;
         }
 
@@ -179,7 +180,7 @@
             font-size: 22px;
         }
 
-        /* Updated Payment Box CSS for Centering */
+        /* Payment Box Flexbox Centering */
         .payment-box {
             background: #ffffff;
             border-radius: 12px;
@@ -191,23 +192,25 @@
             align-items: center;
             justify-content: center;
             text-align: center;
+            width: 100%;
         }
 
         .payment-box h3 {
             color: var(--paynow-color);
             font-size: 16px;
             font-weight: 700;
-            margin-bottom: 15px;
+            margin-bottom: 12px;
             text-transform: uppercase;
         }
 
+        /* Reduced QR Code container to 150px and strictly centered */
         .qr-code {
-            width: 180px;
-            height: 180px;
-            margin: 0 auto 15px;
+            width: 150px;
+            height: 150px;
+            margin: 0 auto 12px auto;
             border: 2px solid #e2e8f0;
             border-radius: 8px;
-            padding: 5px;
+            padding: 4px;
             background: #ffffff;
             display: flex;
             align-items: center;
@@ -219,13 +222,14 @@
             height: 100%;
             object-fit: contain;
             display: block;
+            margin: 0 auto;
         }
 
         .payment-instructions {
             font-size: 13px;
             color: #475569;
             line-height: 1.4;
-            max-width: 400px;
+            max-width: 380px;
         }
 
         .checkout-btn {
