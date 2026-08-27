@@ -1,68 +1,325 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Protide Peptides - Storefront</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PapaPepprotide - Order Form</title>
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-    body { background-color: #f4f6f9; color: #333; padding: 20px; }
-    .container { max-width: 500px; margin: 0 auto; background: #ffffff; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
-    h1 { color: #0088cc; font-size: 24px; text-align: center; margin-bottom: 5px; }
-    p.subtitle { text-align: center; color: #666; font-size: 14px; margin-bottom: 20px; }
-    .catalog-title { font-size: 16px; font-weight: bold; margin-bottom: 12px; border-bottom: 2px solid #eef2f5; padding-bottom: 8px; }
-    .product-list { list-style: none; margin-bottom: 25px; }
-    .product-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #f0f0f0; }
-    .product-name { font-weight: 600; font-size: 14px; }
-    .product-price { font-weight: bold; color: #2e7d32; font-size: 14px; }
-    .btn-container { text-align: center; }
-    .order-btn { display: block; width: 100%; padding: 15px; background-color: #0088cc; color: #ffffff; font-size: 16px; font-weight: bold; text-decoration: none; border-radius: 8px; transition: background 0.2s ease; }
-    .order-btn:hover { background-color: #006699; }
-    .notice { font-size: 12px; color: #888; text-align: center; margin-top: 15px; }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+    body {
+      background-color: #f4f6f8;
+      color: #333;
+      padding: 20px 12px;
+      display: flex;
+      justify-content: center;
+    }
+    .container {
+      max-width: 480px;
+      width: 100%;
+      background: #ffffff;
+      border-radius: 16px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+      padding: 24px;
+    }
+    .header {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+    .logo {
+      width: 80px;
+      height: 80px;
+      object-fit: contain;
+      margin-bottom: 8px;
+    }
+    .title {
+      font-size: 22px;
+      font-weight: 700;
+      color: #1a1a1a;
+      letter-spacing: -0.3px;
+    }
+    .subtitle {
+      font-size: 13px;
+      color: #666;
+      margin-top: 4px;
+    }
+    .catalog {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+    .product-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 14px;
+      border: 1px solid #e1e4e8;
+      border-radius: 12px;
+      background: #fafafa;
+    }
+    .product-info {
+      flex: 1;
+      padding-right: 12px;
+    }
+    .product-name {
+      font-size: 14px;
+      font-weight: 600;
+      color: #222;
+    }
+    .product-price {
+      font-size: 14px;
+      color: #2b8a3e;
+      font-weight: 600;
+      margin-top: 2px;
+    }
+    .qty-controls {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .btn-qty {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      border: 1px solid #d0d7de;
+      background: #ffffff;
+      font-size: 18px;
+      font-weight: 600;
+      color: #333;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      user-select: none;
+    }
+    .btn-qty:active {
+      background: #e9ecef;
+      transform: scale(0.96);
+    }
+    .qty-val {
+      font-size: 15px;
+      font-weight: 600;
+      width: 20px;
+      text-align: center;
+    }
+    .summary-card {
+      background: #f8f9fa;
+      border: 1px dashed #ced4da;
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 24px;
+    }
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 14px;
+      margin-bottom: 6px;
+      color: #495057;
+    }
+    .total-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 18px;
+      font-weight: 700;
+      color: #111;
+      border-top: 1px solid #dee2e6;
+      padding-top: 10px;
+      margin-top: 10px;
+    }
+    .payment-section {
+      text-align: center;
+      border-top: 1px solid #eee;
+      padding-top: 20px;
+    }
+    .payment-title {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: #333;
+    }
+    .qr-container {
+      margin: 12px 0;
+    }
+    .qr-img {
+      width: 200px;
+      height: 200px;
+      border-radius: 12px;
+      border: 2px solid #7b1fa2;
+      padding: 6px;
+      background: #fff;
+    }
+    .instructions {
+      font-size: 13px;
+      color: #444;
+      line-height: 1.5;
+      margin-bottom: 18px;
+      background: #f3e5f5;
+      padding: 12px;
+      border-radius: 10px;
+      text-align: left;
+    }
+    .btn-submit {
+      width: 100%;
+      padding: 14px;
+      background: #0088cc;
+      color: #ffffff;
+      border: none;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: background 0.2s ease;
+    }
+    .btn-submit:hover {
+      background: #0077b5;
+    }
+    .btn-submit:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
   </style>
 </head>
 <body>
 
   <div class="container">
-    <h1>Protide Peptides</h1>
-    <p class="subtitle">Official Direct Order Portal</p>
-
-    <div class="catalog-title">📦 Product Catalog</div>
-    <ul class="product-list">
-      <li class="product-item">
-        <span class="product-name">Retatrutide 10mg</span>
-        <span class="product-price">$100.00 / vial</span>
-      </li>
-      <li class="product-item">
-        <span class="product-name">Bacwater 3ml</span>
-        <span class="product-price">$10.00 / vial</span>
-      </li>
-      <li class="product-item">
-        <span class="product-name">Syringe 3ml 25g (Reconstitute)</span>
-        <span class="product-price">$1.50 / unit</span>
-      </li>
-      <li class="product-item">
-        <span class="product-name">100cc Syringe</span>
-        <span class="product-price">$1.00 / unit</span>
-      </li>
-      <li class="product-item">
-        <span class="product-name">4mm Needle 32g</span>
-        <span class="product-price">$1.00 / unit</span>
-      </li>
-      <li class="product-item">
-        <span class="product-name">Alcohol Swab</span>
-        <span class="product-price">$0.50 / unit</span>
-      </li>
-    </ul>
-
-    <div class="btn-container">
-      <a href="https://t.me/papapepprotidebot?start=order" target="_blank" class="order-btn">
-        🛒 Tap Here to Order on Telegram
-      </a>
+    <!-- Header with Logo -->
+    <div class="header">
+      <img src="logo.png" alt="PapaPepprotide Logo" class="logo" />
+      <div class="title">PapaPepprotide</div>
+      <div class="subtitle">Select items & checkout directly via Telegram</div>
     </div>
 
-    <p class="notice">Tapping the button opens @papapepprotidebot directly in your Telegram app.</p>
+    <!-- Product Catalog -->
+    <div class="catalog" id="catalog"></div>
+
+    <!-- Order Summary -->
+    <div class="summary-card">
+      <div id="summary-items">No items selected</div>
+      <div class="total-row">
+        <span>Total:</span>
+        <span id="total-price">$0.00</span>
+      </div>
+    </div>
+
+    <!-- Payment & Telegram Checkout -->
+    <div class="payment-section">
+      <div class="payment-title">Scan to Pay via PayNow</div>
+      <div class="qr-container">
+        <img src="paynow.png" alt="PayNow QR Code" class="qr-img" />
+      </div>
+
+      <div class="instructions">
+        <strong>How to complete your order:</strong><br/>
+        1. Scan PayNow QR code to transfer total amount.<br/>
+        2. Take a screenshot of the payment confirmation.<br/>
+        3. Click <strong>Send Order to Telegram</strong> below to submit details and attach your screenshot to <strong>@Papapepprotide</strong>.
+      </div>
+
+      <button class="btn-submit" id="submit-btn" onclick="sendOrder()" disabled>
+        Send Order to Telegram
+      </button>
+    </div>
   </div>
 
+  <script>
+    const products = [
+      { id: 1, name: "Retatrutide 10mg 3ml vial", price: 100.00, qty: 0 },
+      { id: 2, name: "Bacteriostatic Water 3ml vial", price: 5.00, qty: 0 },
+      { id: 3, name: "3ml Syringe 25G (for reconstitute)", price: 1.00, qty: 0 },
+      { id: 4, name: "1ml Syringe 4mm 32G", price: 0.60, qty: 0 },
+      { id: 5, name: "Alcohol Swab 75%", price: 0.30, qty: 0 }
+    ];
+
+    function renderCatalog() {
+      const catalogEl = document.getElementById("catalog");
+      catalogEl.innerHTML = "";
+
+      products.forEach((p, idx) => {
+        const item = document.createElement("div");
+        item.className = "product-card";
+        item.innerHTML = `
+          <div class="product-info">
+            <div class="product-name">${p.name}</div>
+            <div class="product-price">$${p.price.toFixed(2)}</div>
+          </div>
+          <div class="qty-controls">
+            <button class="btn-qty" onclick="changeQty(${idx}, -1)">-</button>
+            <span class="qty-val">${p.qty}</span>
+            <button class="btn-qty" onclick="changeQty(${idx}, 1)">+</button>
+          </div>
+        `;
+        catalogEl.appendChild(item);
+      });
+
+      updateSummary();
+    }
+
+    function changeQty(index, delta) {
+      if (products[index].qty + delta >= 0) {
+        products[index].qty += delta;
+        renderCatalog();
+      }
+    }
+
+    function updateSummary() {
+      const summaryItemsEl = document.getElementById("summary-items");
+      const totalPriceEl = document.getElementById("total-price");
+      const submitBtn = document.getElementById("submit-btn");
+
+      let total = 0;
+      let selectedHtml = "";
+      let hasSelection = false;
+
+      products.forEach(p => {
+        if (p.qty > 0) {
+          hasSelection = true;
+          const itemTotal = p.qty * p.price;
+          total += itemTotal;
+          selectedHtml += `
+            <div class="summary-row">
+              <span>${p.name} (x${p.qty})</span>
+              <span>$${itemTotal.toFixed(2)}</span>
+            </div>
+          `;
+        }
+      });
+
+      summaryItemsEl.innerHTML = selectedHtml || '<div style="color:#888; font-size:13px;">No items selected</div>';
+      totalPriceEl.textContent = `$${total.toFixed(2)}`;
+      submitBtn.disabled = !hasSelection;
+    }
+
+    function sendOrder() {
+      let orderText = "🛒 NEW ORDER - PapaPepprotide\n\n";
+      let total = 0;
+
+      products.forEach(p => {
+        if (p.qty > 0) {
+          const itemTotal = p.qty * p.price;
+          total += itemTotal;
+          orderText += `• ${p.name} x${p.qty} = $${itemTotal.toFixed(2)}\n`;
+        }
+      });
+
+      orderText += `\nTotal Amount: $${total.toFixed(2)}\n\n`;
+      orderText += "Payment screenshot attached below:";
+
+      const encodedText = encodeURIComponent(orderText);
+      const telegramUrl = `https://t.me/Papapepprotide?text=${encodedText}`;
+
+      window.open(telegramUrl, "_blank");
+    }
+
+    renderCatalog();
+  </script>
 </body>
 </html>
