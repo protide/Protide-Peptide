@@ -221,7 +221,7 @@
         <strong>How to complete your order:</strong><br/>
         1. Scan PayNow QR code to transfer total amount.<br/>
         2. Take a screenshot of the payment confirmation.<br/>
-        3. Click <strong>Send Order to Telegram</strong> below to submit details and attach your screenshot to <strong>@Papapepprotide</strong>.
+        3. Click <strong>Send Order to Telegram</strong> below to open the Telegram group and paste your order details along with your payment screenshot.
       </div>
 
       <button class="btn-submit" id="submit-btn" onclick="sendOrder()" disabled>
@@ -310,13 +310,15 @@
         }
       });
 
-      orderText += `\nTotal Amount: $${total.toFixed(2)}\n\n`;
-      orderText += "Payment screenshot attached below:";
+      orderText += `\nTotal Amount: $${total.toFixed(2)}`;
 
-      const encodedText = encodeURIComponent(orderText);
-      const telegramUrl = `https://t.me/Papapepprotide?text=${encodedText}`;
+      // Copy formatted text to clipboard automatically
+      navigator.clipboard.writeText(orderText).then(() => {
+        alert("Order details copied to clipboard! Opening Telegram...");
+      }).catch(() => {});
 
-      window.open(telegramUrl, "_blank");
+      // Open group link
+      window.open("https://t.me/+PqKUpGSNEWA4NzBl", "_blank");
     }
 
     renderCatalog();
