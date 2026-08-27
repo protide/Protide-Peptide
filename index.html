@@ -1,358 +1,364 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>PapaPepprotide - Order Form</title>
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    }
-    body {
-      background-color: #f4f6f8;
-      color: #333;
-      padding: 20px 12px;
-      display: flex;
-      justify-content: center;
-    }
-    .container {
-      max-width: 480px;
-      width: 100%;
-      background: #ffffff;
-      border-radius: 16px;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.08);
-      padding: 24px;
-    }
-    .header {
-      text-align: center;
-      margin-bottom: 24px;
-    }
-    .logo {
-      width: 80px;
-      height: 80px;
-      object-fit: contain;
-      margin-bottom: 8px;
-    }
-    .title {
-      font-size: 22px;
-      font-weight: 700;
-      color: #1a1a1a;
-      letter-spacing: -0.3px;
-    }
-    .subtitle {
-      font-size: 13px;
-      color: #666;
-      margin-top: 4px;
-    }
-    .catalog-section-title {
-      font-size: 14px;
-      font-weight: 700;
-      letter-spacing: 0.8px;
-      color: #495057;
-      text-transform: uppercase;
-      margin-bottom: 12px;
-      border-bottom: 2px solid #e9ecef;
-      padding-bottom: 6px;
-    }
-    .catalog {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      margin-bottom: 24px;
-    }
-    .product-card {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 12px 14px;
-      border: 1px solid #e1e4e8;
-      border-radius: 12px;
-      background: #fafafa;
-    }
-    .product-info {
-      flex: 1;
-      padding-right: 12px;
-    }
-    .product-name {
-      font-size: 14px;
-      font-weight: 600;
-      color: #222;
-    }
-    .product-price {
-      font-size: 14px;
-      color: #2b8a3e;
-      font-weight: 600;
-      margin-top: 2px;
-    }
-    .qty-controls {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .btn-qty {
-      width: 32px;
-      height: 32px;
-      border-radius: 8px;
-      border: 1px solid #d0d7de;
-      background: #ffffff;
-      font-size: 18px;
-      font-weight: 600;
-      color: #333;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      user-select: none;
-    }
-    .btn-qty:active {
-      background: #e9ecef;
-      transform: scale(0.96);
-    }
-    .qty-val {
-      font-size: 15px;
-      font-weight: 600;
-      width: 20px;
-      text-align: center;
-    }
-    .summary-card {
-      background: #f8f9fa;
-      border: 1px dashed #ced4da;
-      border-radius: 12px;
-      padding: 16px;
-      margin-bottom: 24px;
-    }
-    .summary-row {
-      display: flex;
-      justify-content: space-between;
-      font-size: 14px;
-      margin-bottom: 6px;
-      color: #495057;
-    }
-    .total-row {
-      display: flex;
-      justify-content: space-between;
-      font-size: 18px;
-      font-weight: 700;
-      color: #111;
-      border-top: 1px solid #dee2e6;
-      padding-top: 10px;
-      margin-top: 10px;
-    }
-    .payment-section {
-      text-align: center;
-      border-top: 1px solid #eee;
-      padding-top: 20px;
-    }
-    .payment-title {
-      font-size: 16px;
-      font-weight: 600;
-      margin-bottom: 8px;
-      color: #333;
-    }
-    .qr-container {
-      margin: 12px 0;
-    }
-    .qr-img {
-      width: 200px;
-      height: 200px;
-      border-radius: 12px;
-      border: 2px solid #7b1fa2;
-      padding: 6px;
-      background: #fff;
-    }
-    .instructions {
-      font-size: 13px;
-      color: #444;
-      line-height: 1.5;
-      margin-bottom: 18px;
-      background: #f3e5f5;
-      padding: 12px;
-      border-radius: 10px;
-      text-align: left;
-    }
-    .btn-submit {
-      width: 100%;
-      padding: 14px;
-      background: #0088cc;
-      color: #ffffff;
-      border: none;
-      border-radius: 12px;
-      font-size: 16px;
-      font-weight: 600;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      transition: background 0.2s ease;
-    }
-    .btn-submit:hover {
-      background: #0077b5;
-    }
-    .btn-submit:disabled {
-      background: #ccc;
-      cursor: not-allowed;
-    }
-    .fallback-link {
-      display: block;
-      margin-top: 12px;
-      font-size: 13px;
-      color: #0088cc;
-      text-decoration: underline;
-      cursor: pointer;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PROTIDE PEPTIDES - Order Form</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --accent-color: #38bdf8;
+            --accent-hover: #0284c7;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --border-color: #334155;
+            --paynow-color: #7b1fa2;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+            background: var(--card-bg);
+            border-radius: 20px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.5);
+            border: 1px solid var(--border-color);
+            overflow: hidden;
+        }
+
+        .header {
+            text-align: center;
+            padding: 30px 20px 20px;
+            background: linear-gradient(180deg, rgba(56, 189, 248, 0.1) 0%, rgba(30, 41, 59, 0) 100%);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .logo {
+            width: 90px;
+            height: 90px;
+            margin: 0 auto 15px;
+            border-radius: 50%;
+            background: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        .logo img {
+            width: 85%;
+            height: 85%;
+            object-fit: contain;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            color: var(--text-primary);
+            text-transform: uppercase;
+        }
+
+        .header p {
+            color: var(--text-secondary);
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        .catalog {
+            padding: 25px;
+        }
+
+        .product-card {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px;
+            margin-bottom: 12px;
+            background-color: rgba(15, 23, 42, 0.6);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            transition: all 0.2s ease;
+        }
+
+        .product-card:hover {
+            border-color: var(--accent-color);
+        }
+
+        .product-info {
+            flex-grow: 1;
+            padding-right: 15px;
+        }
+
+        .product-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .product-price {
+            font-size: 14px;
+            color: var(--accent-color);
+            font-weight: 500;
+        }
+
+        .quantity-control {
+            display: flex;
+            align-items: center;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .btn-qty {
+            width: 34px;
+            height: 34px;
+            background: transparent;
+            border: none;
+            color: var(--text-primary);
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-qty:hover {
+            background-color: var(--border-color);
+        }
+
+        .qty-value {
+            width: 36px;
+            text-align: center;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .summary-section {
+            padding: 20px 25px;
+            background: rgba(15, 23, 42, 0.8);
+            border-top: 1px solid var(--border-color);
+        }
+
+        .total-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .total-price {
+            color: var(--accent-color);
+            font-size: 22px;
+        }
+
+        .payment-box {
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 20px;
+            color: #1e293b;
+        }
+
+        .payment-box h3 {
+            color: var(--paynow-color);
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+        }
+
+        .qr-code {
+            width: 180px;
+            height: 180px;
+            margin: 0 auto 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 5px;
+            background: #ffffff;
+        }
+
+        .qr-code img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .payment-instructions {
+            font-size: 13px;
+            color: #475569;
+            line-height: 1.4;
+        }
+
+        .checkout-btn {
+            width: 100%;
+            padding: 16px;
+            background-color: var(--accent-color);
+            color: #0f172a;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .checkout-btn:hover {
+            background-color: var(--accent-hover);
+            color: #ffffff;
+        }
+
+        .checkout-btn:disabled {
+            background-color: var(--border-color);
+            color: var(--text-secondary);
+            cursor: not-allowed;
+        }
+    </style>
 </head>
 <body>
 
-  <div class="container">
-    <!-- Header with Logo -->
+<div class="container">
     <div class="header">
-      <img src="logo.png" alt="PapaPepprotide Logo" class="logo" />
-      <div class="title">PapaPepprotide</div>
-      <div class="subtitle">Select items & checkout directly via Telegram</div>
+        <div class="logo">
+            <!-- Ensure your logo file is named logo.png in the same GitHub repository folder -->
+            <img src="logo.png" alt="PROTIDE PEPTIDES Logo">
+        </div>
+        <h1>PROTIDE PEPTIDES</h1>
+        <p>Select item quantities below to place your order</p>
     </div>
 
-    <!-- Product Catalog Heading & List -->
-    <div class="catalog-section-title">PROTIDE PEPTIDES</div>
     <div class="catalog" id="catalog"></div>
 
-    <!-- Order Summary -->
-    <div class="summary-card">
-      <div id="summary-items">No items selected</div>
-      <div class="total-row">
-        <span>Total:</span>
-        <span id="total-price">$0.00</span>
-      </div>
+    <div class="summary-section">
+        <div class="total-row">
+            <span>Total Amount:</span>
+            <span class="total-price" id="total-price">$0.00</span>
+        </div>
+
+        <div class="payment-box">
+            <h3>Scan & Pay via PayNow</h3>
+            <div class="qr-code">
+                <!-- Ensure your PayNow QR image file is named paynow.png in the same GitHub repository folder -->
+                <img src="paynow.png" alt="PayNow QR Code">
+            </div>
+            <p class="payment-instructions">
+                Scan the QR code to complete payment. Click below to send your order details and attach your payment screenshot to <strong>@Papapepprotide</strong> on Telegram.
+            </p>
+        </div>
+
+        <button class="checkout-btn" id="checkout-btn" onclick="sendOrder()" disabled>
+            Send Order via Telegram
+        </button>
     </div>
+</div>
 
-    <!-- Payment & Telegram Checkout -->
-    <div class="payment-section">
-      <div class="payment-title">Scan to Pay via PayNow</div>
-      <div class="qr-container">
-        <img src="paynow.png" alt="PayNow QR Code" class="qr-img" />
-      </div>
-
-      <div class="instructions">
-        <strong>How to complete your order:</strong><br/>
-        1. Scan PayNow QR code to transfer total amount.<br/>
-        2. Take a screenshot of your payment confirmation.<br/>
-        3. Click <strong>Send Order to Telegram</strong> below.<br/>
-        4. Paste your copied order summary into Telegram along with your payment screenshot.
-      </div>
-
-      <button class="btn-submit" id="submit-btn" onclick="sendOrder()" disabled>
-        Send Order to Telegram
-      </button>
-
-      <a id="direct-link" href="https://t.me/+PqKUpGSNEWA4NzBl" target="_blank" class="fallback-link" style="display:none;">
-        Click here if Telegram does not open automatically
-      </a>
-    </div>
-  </div>
-
-  <script>
-    const tgUrl = "https://t.me/+PqKUpGSNEWA4NzBl";
+<script>
     const products = [
-      { id: 1, name: "Retatrutide 10mg 3ml vial", price: 100.00, qty: 0 },
-      { id: 2, name: "Bacteriostatic Water 3ml vial", price: 5.00, qty: 0 },
-      { id: 3, name: "3ml Syringe 25G (for reconstitute)", price: 1.00, qty: 0 },
-      { id: 4, name: "1ml Syringe 4mm 32G", price: 0.60, qty: 0 },
-      { id: 5, name: "Alcohol Swab 75%", price: 0.30, qty: 0 }
+        { id: 1, name: "Retatrutide 10mg 3ml vial", price: 100.00 },
+        { id: 2, name: "Bacteriostatic Water 3ml vial", price: 5.00 },
+        { id: 3, name: "3ml Syringe 25G (for reconstitute)", price: 1.00 },
+        { id: 4, name: "1ml Syringe 4mm 32G", price: 0.60 },
+        { id: 5, name: "Alcohol Swab 75%", price: 0.30 }
     ];
 
+    const quantities = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
+
     function renderCatalog() {
-      const catalogEl = document.getElementById("catalog");
-      catalogEl.innerHTML = "";
+        const catalogContainer = document.getElementById('catalog');
+        catalogContainer.innerHTML = '';
 
-      products.forEach((p, idx) => {
-        const item = document.createElement("div");
-        item.className = "product-card";
-        item.innerHTML = `
-          <div class="product-info">
-            <div class="product-name">${p.name}</div>
-            <div class="product-price">$${p.price.toFixed(2)}</div>
-          </div>
-          <div class="qty-controls">
-            <button class="btn-qty" onclick="changeQty(${idx}, -1)">-</button>
-            <span class="qty-val">${p.qty}</span>
-            <button class="btn-qty" onclick="changeQty(${idx}, 1)">+</button>
-          </div>
-        `;
-        catalogEl.appendChild(item);
-      });
-
-      updateSummary();
+        products.forEach(product => {
+            const card = document.createElement('div');
+            card.className = 'product-card';
+            card.innerHTML = `
+                <div class="product-info">
+                    <div class="product-title">${product.name}</div>                     <div class="product-price">$${product.price.toFixed(2)}</div>
+                </div>
+                <div class="quantity-control">
+                    <button class="btn-qty" onclick="updateQty(${product.id}, -1)">-</button>
+                    <span class="qty-value" id="qty-${product.id}">0</span>
+                    <button class="btn-qty" onclick="updateQty(${product.id}, 1)">+</button>
+                </div>
+            `;
+            catalogContainer.appendChild(card);
+        });
     }
 
-    function changeQty(index, delta) {
-      if (products[index].qty + delta >= 0) {
-        products[index].qty += delta;
-        renderCatalog();
-      }
-    }
-
-    function updateSummary() {
-      const summaryItemsEl = document.getElementById("summary-items");
-      const totalPriceEl = document.getElementById("total-price");
-      const submitBtn = document.getElementById("submit-btn");
-
-      let total = 0;
-      let selectedHtml = "";
-      let hasSelection = false;
-
-      products.forEach(p => {
-        if (p.qty > 0) {
-          hasSelection = true;
-          const itemTotal = p.qty * p.price;
-          total += itemTotal;
-          selectedHtml += `
-            <div class="summary-row">
-              <span>${p.name} (x${p.qty})</span>
-              <span>$${itemTotal.toFixed(2)}</span>
-            </div>
-          `;
+    function updateQty(id, change) {
+        if (quantities[id] + change >= 0) {
+            quantities[id] += change;
+            document.getElementById(`qty-${id}`).innerText = quantities[id];
+            calculateTotal();
         }
-      });
+    }
 
-      summaryItemsEl.innerHTML = selectedHtml || '<div style="color:#888; font-size:13px;">No items selected</div>';
-      totalPriceEl.textContent = `$${total.toFixed(2)}`;
-      submitBtn.disabled = !hasSelection;
+    function calculateTotal() {
+        let total = 0;
+        let itemCount = 0;
+
+        products.forEach(product => {
+            total += quantities[product.id] * product.price;
+            itemCount += quantities[product.id];
+        });
+
+        document.getElementById('total-price').innerText = `$${total.toFixed(2)}`;
+        document.getElementById('checkout-btn').disabled = itemCount === 0;
     }
 
     function sendOrder() {
-      let orderText = "🛒 NEW ORDER - PapaPepprotide\n\n";
-      let total = 0;
+        let orderSummary = "🛒 NEW ORDER - PROTIDE PEPTIDES\n\n";
+        let total = 0;
 
-      products.forEach(p => {
-        if (p.qty > 0) {
-          const itemTotal = p.qty * p.price;
-          total += itemTotal;
-          orderText += `• ${p.name} x${p.qty} = $${itemTotal.toFixed(2)}\n`;
-        }
-      });
-
-      orderText += `\nTotal Paid: $${total.toFixed(2)}\n\n`;
-      orderText += "Payment receipt attached below:";
-
-      if (navigator.clipboard && window.isSecureContext) {
-        navigator.clipboard.writeText(orderText).finally(() => {
-          redirectToTelegram();
+        products.forEach(product => {
+            const qty = quantities[product.id];
+            if (qty > 0) {
+                const subtotal = qty * product.price;
+                total += subtotal;
+                orderSummary += `• ${product.name}\n  Qty:${qty} x $${product.price.toFixed(2)} =$${subtotal.toFixed(2)}\n`;
+            }
         });
-      } else {
-        redirectToTelegram();
-      }
-    }
 
-    function redirectToTelegram() {
-      document.getElementById("direct-link").style.display = "block";
-      window.location.href = tgUrl;
+        orderSummary += `\n💰 Total Amount: $${total.toFixed(2)}`;
+        orderSummary += `\n\n📸 (Payment screenshot attached below)`;
+
+        const telegramHandle = "Papapepprotide";
+        const encodedText = encodeURIComponent(orderSummary);
+        const telegramUrl = `https://t.me/${telegramHandle}?text=${encodedText}`;
+
+        window.open(telegramUrl, '_blank');
     }
 
     renderCatalog();
-  </script>
+</script>
+
 </body>
 </html>
