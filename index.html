@@ -220,12 +220,13 @@
       <div class="instructions">
         <strong>How to complete your order:</strong><br/>
         1. Scan PayNow QR code to transfer total amount.<br/>
-        2. Take a screenshot of the payment confirmation.<br/>
-        3. Click <strong>Send Order to Telegram</strong> below to open the Telegram group, then paste your order details and attach your screenshot.
+        2. Take a screenshot of your payment confirmation.<br/>
+        3. Click <strong>Send & CC Order to Telegram</strong> below to open the preparation chat group.<br/>
+        4. Paste your copied order summary and attach your payment screenshot.
       </div>
 
       <button class="btn-submit" id="submit-btn" onclick="sendOrder()" disabled>
-        Send Order to Telegram
+        Send & CC Order to Telegram
       </button>
     </div>
   </div>
@@ -299,7 +300,7 @@
     }
 
     function sendOrder() {
-      let orderText = "🛒 NEW ORDER - PapaPepprotide\n\n";
+      let orderText = "📦 CC / NEW PREPARATION ORDER - PapaPepprotide\n\n";
       let total = 0;
 
       products.forEach(p => {
@@ -310,10 +311,12 @@
         }
       });
 
-      orderText += `\nTotal Amount: $${total.toFixed(2)}`;
+      orderText += `\nTotal Paid: $${total.toFixed(2)}\n`;
+      orderText += "CC Group: https://t.me/+PqKUpGSNEWA4NzBl\n\n";
+      orderText += "Please prepare the items listed above. Payment receipt attached below:";
 
       navigator.clipboard.writeText(orderText).then(() => {
-        alert("Order details copied to clipboard! Opening Telegram...");
+        alert("Order details copied to clipboard! Redirecting to group to post order and payment receipt...");
       }).catch(() => {});
 
       window.open("https://t.me/+PqKUpGSNEWA4NzBl", "_blank");
