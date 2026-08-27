@@ -51,7 +51,6 @@
             border-bottom: 1px solid var(--border-color);
         }
 
-        /* Increased logo container size */
         .logo {
             width: 130px;
             height: 130px;
@@ -84,6 +83,18 @@
             color: var(--text-secondary);
             font-size: 14px;
             margin-top: 5px;
+        }
+
+        .delivery-notice {
+            background: rgba(56, 189, 248, 0.1);
+            border: 1px solid var(--accent-color);
+            color: var(--accent-color);
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin: 15px 25px 0;
+            text-align: center;
+            font-size: 13px;
+            font-weight: 500;
         }
 
         .catalog {
@@ -160,6 +171,46 @@
             color: var(--text-primary);
         }
 
+        .customer-details {
+            padding: 0 25px 25px 25px;
+        }
+
+        .customer-details h3 {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 12px;
+        }
+
+        .form-group {
+            margin-bottom: 12px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            margin-bottom: 6px;
+            text-transform: uppercase;
+        }
+
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            background-color: rgba(15, 23, 42, 0.6);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.2s ease;
+        }
+
+        .form-group input:focus, .form-group textarea:focus {
+            border-color: var(--accent-color);
+        }
+
         .summary-section {
             padding: 20px 25px;
             background: rgba(15, 23, 42, 0.8);
@@ -180,7 +231,6 @@
             font-size: 22px;
         }
 
-        /* Payment Box Flexbox Centering */
         .payment-box {
             background: #ffffff;
             border-radius: 12px;
@@ -203,7 +253,6 @@
             text-transform: uppercase;
         }
 
-        /* Reduced QR Code container to 150px and strictly centered */
         .qr-code {
             width: 150px;
             height: 150px;
@@ -270,7 +319,27 @@
         <p>Select item quantities below to place your order</p>
     </div>
 
+    <div class="delivery-notice">
+        🚚 Standard Delivery Time: <strong>3 – 5 Days</strong>
+    </div>
+
     <div class="catalog" id="catalog"></div>
+
+    <div class="customer-details">
+        <h3>Delivery Information</h3>
+        <div class="form-group">
+            <label for="cust-name">Full Name *</label>
+            <input type="text" id="cust-name" placeholder="Enter your full name" oninput="validateForm()">
+        </div>
+        <div class="form-group">
+            <label for="cust-phone">Contact Number *</label>
+            <input type="tel" id="cust-phone" placeholder="Enter phone number" oninput="validateForm()">
+        </div>
+        <div class="form-group">
+            <label for="cust-address">Delivery Address *</label>
+            <textarea id="cust-address" rows="3" placeholder="Enter street address, unit number, postal code" oninput="validateForm()"></textarea>
+        </div>
+    </div>
 
     <div class="summary-section">
         <div class="total-row">
@@ -336,6 +405,10 @@
     }
 
     function calculateTotal() {
+        validateForm();
+    }
+
+    function validateForm() {
         let total = 0;
         let itemCount = 0;
 
@@ -345,11 +418,29 @@
         });
 
         document.getElementById('total-price').innerText = `$${total.toFixed(2)}`;
-        document.getElementById('checkout-btn').disabled = itemCount === 0;
+
+        const name = document.getElementById('cust-name').value.trim();
+        const phone = document.getElementById('cust-phone').value.trim();
+        const address = document.getElementById('cust-address').value.trim();
+
+        const isValid = itemCount > 0 && name !== "" && phone !== "" && address !== "";
+        document.getElementById('checkout-btn').disabled = !isValid;
     }
 
     function sendOrder() {
-        let orderSummary = "🛒 NEW ORDER - PROTIDE PEPTIDES\n\n";
+        const name = document.getElementById('cust-name').value.trim();
+        const phone = document.getElementById('cust-phone').value.trim();
+        const address = document.getElementById('cust-address').value.trim();
+
+        let orderSummary = "🛒 NEW ORDER - PROTIDE PEPTIDES\n";
+        orderSummary += "-------------------------------\n";
+        orderSummary += `👤 Name: ${name}\n`;
+        orderSummary += `📞 Contact: ${phone}\n`;
+        orderSummary += `📍 Address: ${address}\n`;
+        orderSummary += `🚚 Est. Delivery: 3-5 Business Days\n`;
+        orderSummary += "-------------------------------\n";
+        orderSummary += "ITEMS ORDERED:\n";
+
         let total = 0;
 
         products.forEach(product => {
