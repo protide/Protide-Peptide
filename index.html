@@ -366,13 +366,14 @@
 <script>
     const products = [
         { id: 1, name: "Retatrutide 10mg 3ml vial", price: 100.00 },
-        { id: 2, name: "Bacteriostatic Water 3ml vial", price: 5.00 },
-        { id: 3, name: "3ml Syringe 25G (for reconstitute)", price: 1.00 },
-        { id: 4, name: "1ml Syringe 4mm 32G", price: 0.60 },
+        { id: 2, name: "Retatrutide 20mg 3ml vial", price: 180.00 },
+        { id: 3, name: "Klow 80mg vial", price: 180.00 },
+        { id: 4, name: "Bacteriostatic Water 3ml vial", price: 10.00 },
         { id: 5, name: "Alcohol Swab 75%", price: 0.30 }
     ];
 
-    const quantities = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
+    const quantities = {};
+    products.forEach(product => { quantities[product.id] = 0; });
 
     function renderCatalog() {
         const catalogContainer = document.getElementById('catalog');
