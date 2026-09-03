@@ -98,6 +98,33 @@
             font-weight: 500;
         }
 
+        .pdf-button-wrapper {
+            padding: 10px 25px 0;
+            text-align: center;
+        }
+
+        .pdf-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+            padding: 12px;
+            background-color: transparent;
+            border: 1px solid var(--accent-color);
+            color: var(--accent-color);
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .pdf-btn:hover {
+            background-color: var(--accent-color);
+            color: #0f172a;
+        }
+
         .catalog {
             padding: 25px;
         }
@@ -353,6 +380,12 @@
 
     <div class="delivery-notice">
         🚚 Standard Delivery Time: <strong>3 – 5 Days</strong>
+    </div>
+
+    <div class="pdf-button-wrapper">
+        <a href="https://github.com/protide/Protide-COA/blob/48e1e8bcc0c80fadf687a4c010dbc6a477147e40/catalog%20info.pdf" target="_blank" class="pdf-btn">
+            📄 View Catalog Info & Dosing Guide (PDF)
+        </a>
     </div>
 
     <div class="catalog" id="catalog"></div>
