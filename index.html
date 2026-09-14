@@ -285,25 +285,28 @@
             border-color: var(--accent-color);
         }
 
-        /* Promo Code Controls */
-        .promo-wrapper {
+        .promo-input-group {
             display: flex;
             gap: 10px;
         }
 
-        .promo-btn {
+        .promo-input-group input {
+            flex: 1;
+        }
+
+        .btn-apply-promo {
             padding: 0 20px;
             background-color: var(--accent-color);
             color: #0f172a;
             border: none;
             border-radius: 8px;
-            font-weight: 600;
             font-size: 14px;
+            font-weight: 600;
             cursor: pointer;
-            transition: background-color 0.2s ease;
+            transition: all 0.2s ease;
         }
 
-        .promo-btn:hover {
+        .btn-apply-promo:hover {
             background-color: var(--accent-hover);
             color: #ffffff;
         }
@@ -311,17 +314,15 @@
         .promo-message {
             font-size: 12px;
             margin-top: 6px;
-            display: none;
+            display: block;
         }
 
         .promo-message.success {
             color: var(--success-color);
-            display: block;
         }
 
         .promo-message.error {
             color: var(--out-of-stock-color);
-            display: block;
         }
 
         .summary-section {
@@ -351,8 +352,8 @@
             font-weight: 700;
             margin-top: 12px;
             margin-bottom: 20px;
-            border-top: 1px solid var(--border-color);
             padding-top: 12px;
+            border-top: 1px dashed var(--border-color);
         }
 
         .total-price {
@@ -483,15 +484,13 @@
             <label for="cust-address">Delivery Address *</label>
             <textarea id="cust-address" rows="3" placeholder="Enter street address, unit number, postal code" oninput="validateForm()"></textarea>
         </div>
-        
-        <!-- Promo Code Section -->
         <div class="form-group">
             <label for="promo-code">Promo Code</label>
-            <div class="promo-wrapper">
-                <input type="text" id="promo-code" placeholder="Enter promo code (Case Sensitive)">
-                <button type="button" class="promo-btn" onclick="applyPromoCode()">Apply</button>
+            <div class="promo-input-group">
+                <input type="text" id="promo-code" placeholder="Enter code (Case Sensitive)">
+                <button type="button" class="btn-apply-promo" onclick="applyPromoCode()">Apply</button>
             </div>
-            <div id="promo-msg" class="promo-message"></div>
+            <span id="promo-msg" class="promo-message"></span>
         </div>
     </div>
 
@@ -502,7 +501,7 @@
         </div>
         <div class="summary-row discount-row" id="discount-row" style="display: none;">
             <span>Discount (30%):</span>
-            <span id="discount-price">-$0.00</span>
+            <span id="discount-amount">-$0.00</span>
         </div>
         <div class="total-row">
             <span>Total Amount:</span>
@@ -541,8 +540,8 @@
     const quantities = {};
     products.forEach(product => { quantities[product.id] = 0; });
 
-    let appliedDiscountRate = 0;
-    let appliedPromoCodeName = "";
+    let appliedDiscount = 0; // Discount multiplier (0.30 for 30%)
+    let activePromoCode = "";
 
     function renderCatalog() {
         const catalogContainer = document.getElementById('catalog');
@@ -589,28 +588,27 @@
     }
 
     function applyPromoCode() {
-        const codeInput = document.getElementById('promo-code').value;
-        const msgDiv = document.getElementById('promo-msg');
+        const promoInput = document.getElementById('promo-code').value.trim();
+        const msgElement = document.getElementById('promo-msg');
 
-        // Case-sensitive validation check
-        if (codeInput === "DEDEL" || codeInput === "MEL") {
-            appliedDiscountRate = 0.30;
-            appliedPromoCodeName = codeInput;
-            msgDiv.className = "promo-message success";
-            msgDiv.innerText = `Promo code "${codeInput}" applied! 30% discount applied.`;
-        } else if (codeInput === "") {
-            appliedDiscountRate = 0;
-            appliedPromoCodeName = "";
-            msgDiv.className = "promo-message";
-            msgDiv.innerText = "";
+        // Case-sensitive check strictly for exact matches: 'DEDEL' or 'MEL'
+        if (promoInput === 'DEDEL' || promoInput === 'MEL') {
+            appliedDiscount = 0.30;
+            activePromoCode = promoInput;
+            msgElement.className = 'promo-message success';
+            msgElement.innerText = `Promo code "${promoInput}" applied! 30% off.`;
+        } else if (promoInput === '') {
+            appliedDiscount = 0;
+            activePromoCode = "";
+            msgElement.innerText = '';
         } else {
-            appliedDiscountRate = 0;
-            appliedPromoCodeName = "";
-            msgDiv.className = "promo-message error";
-            msgDiv.innerText = "Invalid promo code (Codes are case sensitive).";
+            appliedDiscount = 0;
+            activePromoCode = "";
+            msgElement.className = 'promo-message error';
+            msgElement.innerText = 'Invalid code. Code is case-sensitive.';
         }
 
-        calculateTotal();
+        validateForm();
     }
 
     function calculateTotal() {
@@ -628,15 +626,17 @@
             }
         });
 
-        const discountAmount = subtotal * appliedDiscountRate;
-        const finalTotal = subtotal - discountAmount;
+        const discountAmount = subtotal * appliedDiscount;
+        const total = subtotal - discountAmount;
 
         document.getElementById('subtotal-price').innerText = `$${subtotal.toFixed(2)}`;
         
         const discountRow = document.getElementById('discount-row');
-        if (appliedDiscountRate > 0) {
+        if (appliedDiscount > 0) {
             discountRow.style.display = 'flex';
-            document.getElementById('discount-price').innerText = `-$${discountAmount.toFixed(2)}`;
+            document.getElementById('discount-amount').innerText = `-$${discountAmount.toFixed(2)}`;
         } else {
             discountRow.style.display = 'none';
         }
+
+        document.getElementById('total-price').innerText = `$${to
