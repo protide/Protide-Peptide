@@ -136,7 +136,6 @@
 
         .catalog {
             padding: 25px;
-            min-height: 200px;
         }
 
         .product-card {
@@ -167,7 +166,7 @@
             border-radius: 8px;
             overflow: hidden;
             border: 1px solid var(--border-color);
-            background-color: #1e293b;
+            background-color: #ffffff;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -519,7 +518,7 @@
         </div>
 
         <div class="summary-row discount-row" id="discount-container" style="display: none;">
-            <span>Discount (<span id="discount-percent">0%</span>):</span>
+            <span>Discount (30%):</span>
             <span id="discount-amount">-$0.00</span>
         </div>
 
@@ -565,19 +564,20 @@
 
     function renderCatalog() {
         const catalogContainer = document.getElementById('catalog');
-        if (!catalogContainer) return;
-
         catalogContainer.innerHTML = '';
 
         products.forEach(product => {
             const card = document.createElement('div');
             card.className = `product-card ${product.outOfStock ? 'out-of-stock' : ''}`;
 
-            const stockStatus = product.outOfStock 
-                ? `<div class="stock-badge">Out of Stock</div>` 
+            const stockStatus = product.outOfStock
+                ? `<div class="stock-badge">Out of Stock</div>`
                 : `<div class="product-price">$${product.price.toFixed(2)}</div>`;
 
-            let imageHtml = `<div class="product-image"><img src="${product.image}" alt="${product.name}" onerror="this.style.display='none'"></div>`;
+            let imageHtml = '<div class="product-image placeholder"></div>';
+            if(product.image) {
+                imageHtml = `<div class="product-image"><img src="${product.image}" alt="${product.name}"></div>`;
+            }
 
             card.innerHTML = `
                 ${imageHtml}
@@ -601,8 +601,7 @@
 
         if (quantities[id] + change >= 0) {
             quantities[id] += change;
-            const qtyElement = document.getElementById(`qty-${id}`);
-            if (qtyElement) qtyElement.innerText = quantities[id];
+            document.getElementById(`qty-${id}`).innerText = quantities[id];
             calculateTotal();
         }
     }
@@ -611,11 +610,12 @@
         const inputCode = document.getElementById('promo-code').value.trim();
         const promoMsg = document.getElementById('promo-msg');
 
-        if (inputCode === "DEDEL" || inputCode === "MEL") {
+        // Case-sensitive check for LEDED or LEM
+        if (inputCode === "LEDED" || inputCode === "LEM") {
             appliedDiscount = 0.30;
             appliedCode = inputCode;
             promoMsg.className = "promo-message success";
-            promoMsg.innerText = `Promo code "${inputCode}" applied! 30% discount.`;
+            promoMsg.innerText = `Promo code "${inputCode}" applied! (30% off)`;
         } else if (inputCode === "") {
             appliedDiscount = 0;
             appliedCode = "";
@@ -647,4 +647,4 @@
         const discountAmount = subtotal * appliedDiscount;
         const finalTotal = subtotal - discountAmount;
 
-        const subtotalEl = doc
+        document.getElementById('subtotal-price').innerText = `$
