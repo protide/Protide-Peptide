@@ -16,6 +16,7 @@
             --border-color: #334155;
             --paynow-color: #7b1fa2;
             --out-of-stock-color: #f43f5e;
+            --success-color: #22c55e;
         }
 
         * {
@@ -284,10 +285,62 @@
             border-color: var(--accent-color);
         }
 
+        /* Promo Code Controls */
+        .promo-wrapper {
+            display: flex;
+            gap: 10px;
+        }
+
+        .promo-btn {
+            padding: 0 20px;
+            background-color: var(--accent-color);
+            color: #0f172a;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .promo-btn:hover {
+            background-color: var(--accent-hover);
+            color: #ffffff;
+        }
+
+        .promo-message {
+            font-size: 12px;
+            margin-top: 6px;
+            display: none;
+        }
+
+        .promo-message.success {
+            color: var(--success-color);
+            display: block;
+        }
+
+        .promo-message.error {
+            color: var(--out-of-stock-color);
+            display: block;
+        }
+
         .summary-section {
             padding: 20px 25px;
             background: rgba(15, 23, 42, 0.8);
             border-top: 1px solid var(--border-color);
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+
+        .discount-row {
+            color: var(--success-color);
         }
 
         .total-row {
@@ -296,7 +349,10 @@
             align-items: center;
             font-size: 18px;
             font-weight: 700;
+            margin-top: 12px;
             margin-bottom: 20px;
+            border-top: 1px solid var(--border-color);
+            padding-top: 12px;
         }
 
         .total-price {
@@ -427,9 +483,27 @@
             <label for="cust-address">Delivery Address *</label>
             <textarea id="cust-address" rows="3" placeholder="Enter street address, unit number, postal code" oninput="validateForm()"></textarea>
         </div>
+        
+        <!-- Promo Code Section -->
+        <div class="form-group">
+            <label for="promo-code">Promo Code</label>
+            <div class="promo-wrapper">
+                <input type="text" id="promo-code" placeholder="Enter promo code (Case Sensitive)">
+                <button type="button" class="promo-btn" onclick="applyPromoCode()">Apply</button>
+            </div>
+            <div id="promo-msg" class="promo-message"></div>
+        </div>
     </div>
 
     <div class="summary-section">
+        <div class="summary-row">
+            <span>Subtotal:</span>
+            <span id="subtotal-price">$0.00</span>
+        </div>
+        <div class="summary-row discount-row" id="discount-row" style="display: none;">
+            <span>Discount (30%):</span>
+            <span id="discount-price">-$0.00</span>
+        </div>
         <div class="total-row">
             <span>Total Amount:</span>
             <span class="total-price" id="total-price">$0.00</span>
@@ -466,6 +540,9 @@
 
     const quantities = {};
     products.forEach(product => { quantities[product.id] = 0; });
+
+    let appliedDiscountRate = 0;
+    let appliedPromoCodeName = "";
 
     function renderCatalog() {
         const catalogContainer = document.getElementById('catalog');
@@ -511,68 +588,55 @@
         }
     }
 
+    function applyPromoCode() {
+        const codeInput = document.getElementById('promo-code').value;
+        const msgDiv = document.getElementById('promo-msg');
+
+        // Case-sensitive validation check
+        if (codeInput === "DEDEL" || codeInput === "MEL") {
+            appliedDiscountRate = 0.30;
+            appliedPromoCodeName = codeInput;
+            msgDiv.className = "promo-message success";
+            msgDiv.innerText = `Promo code "${codeInput}" applied! 30% discount applied.`;
+        } else if (codeInput === "") {
+            appliedDiscountRate = 0;
+            appliedPromoCodeName = "";
+            msgDiv.className = "promo-message";
+            msgDiv.innerText = "";
+        } else {
+            appliedDiscountRate = 0;
+            appliedPromoCodeName = "";
+            msgDiv.className = "promo-message error";
+            msgDiv.innerText = "Invalid promo code (Codes are case sensitive).";
+        }
+
+        calculateTotal();
+    }
+
     function calculateTotal() {
         validateForm();
     }
 
     function validateForm() {
-        let total = 0;
+        let subtotal = 0;
         let itemCount = 0;
 
         products.forEach(product => {
             if (!product.outOfStock) {
-                total += quantities[product.id] * product.price;
+                subtotal += quantities[product.id] * product.price;
                 itemCount += quantities[product.id];
             }
         });
 
-        document.getElementById('total-price').innerText = `$${total.toFixed(2)}`;
+        const discountAmount = subtotal * appliedDiscountRate;
+        const finalTotal = subtotal - discountAmount;
 
-        const name = document.getElementById('cust-name').value.trim();
-        const phone = document.getElementById('cust-phone').value.trim();
-        const address = document.getElementById('cust-address').value.trim();
-
-        const isValid = itemCount > 0 && name !== "" && phone !== "" && address !== "";
-        document.getElementById('checkout-btn').disabled = !isValid;
-    }
-
-    function sendOrder() {
-        const name = document.getElementById('cust-name').value.trim();
-        const phone = document.getElementById('cust-phone').value.trim();
-        const address = document.getElementById('cust-address').value.trim();
-
-        let orderSummary = "🛒 NEW ORDER - PROTIDE PEPTIDES\n";
-        orderSummary += "-------------------------------\n";
-        orderSummary += `👤 Name: ${name}\n`;
-        orderSummary += `📞 Contact: ${phone}\n`;
-        orderSummary += `📍 Address: ${address}\n`;
-        orderSummary += `🚚 Est. Delivery: 3-5 Business Days\n`;
-        orderSummary += "-------------------------------\n";
-        orderSummary += "ITEMS ORDERED:\n";
-
-        let total = 0;
-
-        products.forEach(product => {
-            const qty = quantities[product.id];
-            if (qty > 0 && !product.outOfStock) {
-                const subtotal = qty * product.price;
-                total += subtotal;
-                orderSummary += `• ${product.name}\n  Qty: ${qty} x $${product.price.toFixed(2)} = $${subtotal.toFixed(2)}\n`;
-            }
-        });
-
-        orderSummary += `\n💰 Total Amount: $${total.toFixed(2)}`;
-        orderSummary += `\n\n📸 (Payment screenshot attached below)`;
-
-        const telegramHandle = "Papapepprotide";
-        const encodedText = encodeURIComponent(orderSummary);
-        const telegramUrl = `https://t.me/${telegramHandle}?text=${encodedText}`;
-
-        window.open(telegramUrl, '_blank');
-    }
-
-    renderCatalog();
-</script>
-
-</body>
-</html>
+        document.getElementById('subtotal-price').innerText = `$${subtotal.toFixed(2)}`;
+        
+        const discountRow = document.getElementById('discount-row');
+        if (appliedDiscountRate > 0) {
+            discountRow.style.display = 'flex';
+            document.getElementById('discount-price').innerText = `-$${discountAmount.toFixed(2)}`;
+        } else {
+            discountRow.style.display = 'none';
+        }
