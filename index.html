@@ -16,6 +16,7 @@
             --border-color: #334155;
             --paynow-color: #7b1fa2;
             --out-of-stock-color: #f43f5e;
+            --success-color: #22c55e;
         }
 
         * {
@@ -290,13 +291,86 @@
             border-top: 1px solid var(--border-color);
         }
 
+        /* Promo Code Styling */
+        .promo-group {
+            margin-bottom: 20px;
+        }
+
+        .promo-input-wrapper {
+            display: flex;
+            gap: 10px;
+        }
+
+        .promo-input-wrapper input {
+            flex-grow: 1;
+            padding: 10px 12px;
+            background-color: rgba(15, 23, 42, 0.6);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.2s ease;
+        }
+
+        .promo-input-wrapper input:focus {
+            border-color: var(--accent-color);
+        }
+
+        .promo-btn {
+            padding: 10px 16px;
+            background-color: var(--accent-color);
+            color: #0f172a;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .promo-btn:hover {
+            background-color: var(--accent-hover);
+            color: #ffffff;
+        }
+
+        .promo-message {
+            font-size: 12px;
+            margin-top: 6px;
+            display: block;
+        }
+
+        .promo-message.success {
+            color: var(--success-color);
+        }
+
+        .promo-message.error {
+            color: var(--out-of-stock-color);
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+
+        .discount-row {
+            color: var(--success-color);
+        }
+
         .total-row {
             display: flex;
             justify-content: space-between;
             align-items: center;
             font-size: 18px;
             font-weight: 700;
+            margin-top: 12px;
             margin-bottom: 20px;
+            padding-top: 12px;
+            border-top: 1px dashed var(--border-color);
         }
 
         .total-price {
@@ -430,6 +504,26 @@
     </div>
 
     <div class="summary-section">
+        <!-- Promo Code Section -->
+        <div class="form-group promo-group">
+            <label for="promo-code">Promo Code</label>
+            <div class="promo-input-wrapper">
+                <input type="text" id="promo-code" placeholder="Enter Promo Code">
+                <button type="button" class="promo-btn" onclick="applyPromoCode()">Apply</button>
+            </div>
+            <span class="promo-message" id="promo-msg"></span>
+        </div>
+
+        <div class="summary-row">
+            <span>Subtotal:</span>
+            <span id="subtotal-price">$0.00</span>
+        </div>
+
+        <div class="summary-row discount-row" id="discount-container" style="display: none;">
+            <span>Discount (<span id="discount-percent">0%</span>):</span>
+            <span id="discount-amount">-$0.00</span>
+        </div>
+
         <div class="total-row">
             <span>Total Amount:</span>
             <span class="total-price" id="total-price">$0.00</span>
@@ -466,6 +560,9 @@
 
     const quantities = {};
     products.forEach(product => { quantities[product.id] = 0; });
+
+    let appliedDiscount = 0;
+    let appliedCode = "";
 
     function renderCatalog() {
         const catalogContainer = document.getElementById('catalog');
@@ -511,68 +608,43 @@
         }
     }
 
+    function applyPromoCode() {
+        const inputCode = document.getElementById('promo-code').value.trim();
+        const promoMsg = document.getElementById('promo-msg');
+
+        // Case sensitive comparison
+        if (inputCode === "DEDEL" || inputCode === "MEL") {
+            appliedDiscount = 0.30; // 30% discount
+            appliedCode = inputCode;
+            promoMsg.className = "promo-message success";
+            promoMsg.innerText = `Promo code "${inputCode}" applied! 30% discount.`;
+        } else if (inputCode === "") {
+            appliedDiscount = 0;
+            appliedCode = "";
+            promoMsg.innerText = "";
+        } else {
+            appliedDiscount = 0;
+            appliedCode = "";
+            promoMsg.className = "promo-message error";
+            promoMsg.innerText = "Invalid promo code (Codes are case-sensitive).";
+        }
+        calculateTotal();
+    }
+
     function calculateTotal() {
         validateForm();
     }
 
     function validateForm() {
-        let total = 0;
+        let subtotal = 0;
         let itemCount = 0;
 
         products.forEach(product => {
             if (!product.outOfStock) {
-                total += quantities[product.id] * product.price;
+                subtotal += quantities[product.id] * product.price;
                 itemCount += quantities[product.id];
             }
         });
 
-        document.getElementById('total-price').innerText = `$${total.toFixed(2)}`;
-
-        const name = document.getElementById('cust-name').value.trim();
-        const phone = document.getElementById('cust-phone').value.trim();
-        const address = document.getElementById('cust-address').value.trim();
-
-        const isValid = itemCount > 0 && name !== "" && phone !== "" && address !== "";
-        document.getElementById('checkout-btn').disabled = !isValid;
-    }
-
-    function sendOrder() {
-        const name = document.getElementById('cust-name').value.trim();
-        const phone = document.getElementById('cust-phone').value.trim();
-        const address = document.getElementById('cust-address').value.trim();
-
-        let orderSummary = "🛒 NEW ORDER - PROTIDE PEPTIDES\n";
-        orderSummary += "-------------------------------\n";
-        orderSummary += `👤 Name: ${name}\n`;
-        orderSummary += `📞 Contact: ${phone}\n`;
-        orderSummary += `📍 Address: ${address}\n`;
-        orderSummary += `🚚 Est. Delivery: 3-5 Business Days\n`;
-        orderSummary += "-------------------------------\n";
-        orderSummary += "ITEMS ORDERED:\n";
-
-        let total = 0;
-
-        products.forEach(product => {
-            const qty = quantities[product.id];
-            if (qty > 0 && !product.outOfStock) {
-                const subtotal = qty * product.price;
-                total += subtotal;
-                orderSummary += `• ${product.name}\n  Qty: ${qty} x $${product.price.toFixed(2)} = $${subtotal.toFixed(2)}\n`;
-            }
-        });
-
-        orderSummary += `\n💰 Total Amount: $${total.toFixed(2)}`;
-        orderSummary += `\n\n📸 (Payment screenshot attached below)`;
-
-        const telegramHandle = "Papapepprotide";
-        const encodedText = encodeURIComponent(orderSummary);
-        const telegramUrl = `https://t.me/${telegramHandle}?text=${encodedText}`;
-
-        window.open(telegramUrl, '_blank');
-    }
-
-    renderCatalog();
-</script>
-
-</body>
-</html>
+        const discountAmount = subtotal * appliedDiscount;
+        const finalTotal = subtota
