@@ -136,6 +136,7 @@
 
         .catalog {
             padding: 25px;
+            min-height: 200px;
         }
 
         .product-card {
@@ -166,7 +167,7 @@
             border-radius: 8px;
             overflow: hidden;
             border: 1px solid var(--border-color);
-            background-color: #ffffff;
+            background-color: #1e293b;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -576,10 +577,7 @@
                 ? `<div class="stock-badge">Out of Stock</div>` 
                 : `<div class="product-price">$${product.price.toFixed(2)}</div>`;
 
-            let imageHtml = '<div class="product-image placeholder"></div>';
-            if(product.image) {
-                imageHtml = `<div class="product-image"><img src="${product.image}" alt="${product.name}"></div>`;
-            }
+            let imageHtml = `<div class="product-image"><img src="${product.image}" alt="${product.name}" onerror="this.style.display='none'"></div>`;
 
             card.innerHTML = `
                 ${imageHtml}
@@ -588,9 +586,9 @@
                     ${stockStatus}
                 </div>
                 <div class="quantity-control">
-                    <button class="btn-qty" onclick="updateQty(${product.id}, -1)" ${product.outOfStock ? 'disabled' : ''}>-</button>
+                    <button type="button" class="btn-qty" onclick="updateQty(${product.id}, -1)" ${product.outOfStock ? 'disabled' : ''}>-</button>
                     <span class="qty-value" id="qty-${product.id}">0</span>
-                    <button class="btn-qty" onclick="updateQty(${product.id}, 1)" ${product.outOfStock ? 'disabled' : ''}>+</button>
+                    <button type="button" class="btn-qty" onclick="updateQty(${product.id}, 1)" ${product.outOfStock ? 'disabled' : ''}>+</button>
                 </div>
             `;
             catalogContainer.appendChild(card);
@@ -649,4 +647,4 @@
         const discountAmount = subtotal * appliedDiscount;
         const finalTotal = subtotal - discountAmount;
 
-  
+        const subtotalEl = doc
