@@ -16,7 +16,6 @@
             --border-color: #334155;
             --paynow-color: #7b1fa2;
             --out-of-stock-color: #f43f5e;
-            --success-color: #22c55e;
         }
 
         * {
@@ -285,63 +284,10 @@
             border-color: var(--accent-color);
         }
 
-        .promo-input-group {
-            display: flex;
-            gap: 10px;
-        }
-
-        .promo-input-group input {
-            flex: 1;
-        }
-
-        .btn-apply-promo {
-            padding: 0 20px;
-            background-color: var(--accent-color);
-            color: #0f172a;
-            border: none;
-            border-radius: 8px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .btn-apply-promo:hover {
-            background-color: var(--accent-hover);
-            color: #ffffff;
-        }
-
-        .promo-message {
-            font-size: 12px;
-            margin-top: 6px;
-            display: block;
-        }
-
-        .promo-message.success {
-            color: var(--success-color);
-        }
-
-        .promo-message.error {
-            color: var(--out-of-stock-color);
-        }
-
         .summary-section {
             padding: 20px 25px;
             background: rgba(15, 23, 42, 0.8);
             border-top: 1px solid var(--border-color);
-        }
-
-        .summary-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 14px;
-            color: var(--text-secondary);
-            margin-bottom: 8px;
-        }
-
-        .discount-row {
-            color: var(--success-color);
         }
 
         .total-row {
@@ -350,10 +296,7 @@
             align-items: center;
             font-size: 18px;
             font-weight: 700;
-            margin-top: 12px;
             margin-bottom: 20px;
-            padding-top: 12px;
-            border-top: 1px dashed var(--border-color);
         }
 
         .total-price {
@@ -484,25 +427,9 @@
             <label for="cust-address">Delivery Address *</label>
             <textarea id="cust-address" rows="3" placeholder="Enter street address, unit number, postal code" oninput="validateForm()"></textarea>
         </div>
-        <div class="form-group">
-            <label for="promo-code">Promo Code</label>
-            <div class="promo-input-group">
-                <input type="text" id="promo-code" placeholder="Enter code (Case Sensitive)">
-                <button type="button" class="btn-apply-promo" onclick="applyPromoCode()">Apply</button>
-            </div>
-            <span id="promo-msg" class="promo-message"></span>
-        </div>
     </div>
 
     <div class="summary-section">
-        <div class="summary-row">
-            <span>Subtotal:</span>
-            <span id="subtotal-price">$0.00</span>
-        </div>
-        <div class="summary-row discount-row" id="discount-row" style="display: none;">
-            <span>Discount (30%):</span>
-            <span id="discount-amount">-$0.00</span>
-        </div>
         <div class="total-row">
             <span>Total Amount:</span>
             <span class="total-price" id="total-price">$0.00</span>
@@ -539,9 +466,6 @@
 
     const quantities = {};
     products.forEach(product => { quantities[product.id] = 0; });
-
-    let appliedDiscount = 0; // Discount multiplier (0.30 for 30%)
-    let activePromoCode = "";
 
     function renderCatalog() {
         const catalogContainer = document.getElementById('catalog');
@@ -587,56 +511,68 @@
         }
     }
 
-    function applyPromoCode() {
-        const promoInput = document.getElementById('promo-code').value.trim();
-        const msgElement = document.getElementById('promo-msg');
-
-        // Case-sensitive check strictly for exact matches: 'DEDEL' or 'MEL'
-        if (promoInput === 'DEDEL' || promoInput === 'MEL') {
-            appliedDiscount = 0.30;
-            activePromoCode = promoInput;
-            msgElement.className = 'promo-message success';
-            msgElement.innerText = `Promo code "${promoInput}" applied! 30% off.`;
-        } else if (promoInput === '') {
-            appliedDiscount = 0;
-            activePromoCode = "";
-            msgElement.innerText = '';
-        } else {
-            appliedDiscount = 0;
-            activePromoCode = "";
-            msgElement.className = 'promo-message error';
-            msgElement.innerText = 'Invalid code. Code is case-sensitive.';
-        }
-
-        validateForm();
-    }
-
     function calculateTotal() {
         validateForm();
     }
 
     function validateForm() {
-        let subtotal = 0;
+        let total = 0;
         let itemCount = 0;
 
         products.forEach(product => {
             if (!product.outOfStock) {
-                subtotal += quantities[product.id] * product.price;
+                total += quantities[product.id] * product.price;
                 itemCount += quantities[product.id];
             }
         });
 
-        const discountAmount = subtotal * appliedDiscount;
-        const total = subtotal - discountAmount;
+        document.getElementById('total-price').innerText = `$${total.toFixed(2)}`;
 
-        document.getElementById('subtotal-price').innerText = `$${subtotal.toFixed(2)}`;
-        
-        const discountRow = document.getElementById('discount-row');
-        if (appliedDiscount > 0) {
-            discountRow.style.display = 'flex';
-            document.getElementById('discount-amount').innerText = `-$${discountAmount.toFixed(2)}`;
-        } else {
-            discountRow.style.display = 'none';
-        }
+        const name = document.getElementById('cust-name').value.trim();
+        const phone = document.getElementById('cust-phone').value.trim();
+        const address = document.getElementById('cust-address').value.trim();
 
-        document.getElementById('total-price').innerText = `$${to
+        const isValid = itemCount > 0 && name !== "" && phone !== "" && address !== "";
+        document.getElementById('checkout-btn').disabled = !isValid;
+    }
+
+    function sendOrder() {
+        const name = document.getElementById('cust-name').value.trim();
+        const phone = document.getElementById('cust-phone').value.trim();
+        const address = document.getElementById('cust-address').value.trim();
+
+        let orderSummary = "🛒 NEW ORDER - PROTIDE PEPTIDES\n";
+        orderSummary += "-------------------------------\n";
+        orderSummary += `👤 Name: ${name}\n`;
+        orderSummary += `📞 Contact: ${phone}\n`;
+        orderSummary += `📍 Address: ${address}\n`;
+        orderSummary += `🚚 Est. Delivery: 3-5 Business Days\n`;
+        orderSummary += "-------------------------------\n";
+        orderSummary += "ITEMS ORDERED:\n";
+
+        let total = 0;
+
+        products.forEach(product => {
+            const qty = quantities[product.id];
+            if (qty > 0 && !product.outOfStock) {
+                const subtotal = qty * product.price;
+                total += subtotal;
+                orderSummary += `• ${product.name}\n  Qty: ${qty} x $${product.price.toFixed(2)} = $${subtotal.toFixed(2)}\n`;
+            }
+        });
+
+        orderSummary += `\n💰 Total Amount: $${total.toFixed(2)}`;
+        orderSummary += `\n\n📸 (Payment screenshot attached below)`;
+
+        const telegramHandle = "Papapepprotide";
+        const encodedText = encodeURIComponent(orderSummary);
+        const telegramUrl = `https://t.me/${telegramHandle}?text=${encodedText}`;
+
+        window.open(telegramUrl, '_blank');
+    }
+
+    renderCatalog();
+</script>
+
+</body>
+</html>
