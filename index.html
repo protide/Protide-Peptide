@@ -107,6 +107,7 @@
             font-weight: 500;
         }
 
+        /* Catalog Info Tab Button & Dropdown */
         .pdf-button-wrapper {
             padding: 15px 25px 0;
             text-align: center;
@@ -135,89 +136,38 @@
             color: #0f172a;
         }
 
-        /* Modal Styles */
-        .modal-overlay {
+        .catalog-dropdown {
             display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(15, 23, 42, 0.85);
-            backdrop-filter: blur(4px);
-            z-index: 1000;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-
-        .modal-overlay.active {
-            display: flex;
-        }
-
-        .modal-content {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            width: 100%;
-            max-width: 480px;
-            padding: 24px;
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
-            position: relative;
-        }
-
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            padding-bottom: 12px;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .modal-header h3 {
-            font-size: 16px;
-            font-weight: 700;
-            color: var(--text-primary);
-        }
-
-        .close-btn {
-            background: transparent;
-            border: none;
-            color: var(--text-secondary);
-            font-size: 24px;
-            cursor: pointer;
-            line-height: 1;
-        }
-
-        .close-btn:hover {
-            color: var(--text-primary);
-        }
-
-        .modal-links {
-            display: flex;
             flex-direction: column;
-            gap: 12px;
-        }
-
-        .modal-link-item {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 14px 16px;
-            background-color: rgba(15, 23, 42, 0.6);
+            gap: 8px;
+            margin-top: 10px;
+            background-color: rgba(15, 23, 42, 0.8);
             border: 1px solid var(--border-color);
             border-radius: 10px;
+            padding: 10px;
+        }
+
+        .catalog-dropdown.show {
+            display: flex;
+        }
+
+        .dropdown-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 14px;
+            background-color: rgba(30, 41, 59, 0.6);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
             color: var(--text-primary);
             text-decoration: none;
-            font-size: 14px;
-            font-weight: 600;
+            font-size: 13px;
+            font-weight: 500;
             transition: all 0.2s ease;
         }
 
-        .modal-link-item:hover {
+        .dropdown-item:hover {
             border-color: var(--accent-color);
-            background-color: rgba(56, 189, 248, 0.1);
             color: var(--accent-color);
         }
 
@@ -505,11 +455,25 @@
         🚚 Standard Delivery Time: <strong>3 – 5 Days</strong>
     </div>
 
-    <!-- Existing Tab Button -->
+    <!-- Existing Tab Button for Catalog Info & Dosing Guide -->
     <div class="pdf-button-wrapper">
-        <button type="button" class="pdf-btn" onclick="openModal()">
-            📄 View Catalog Info & Dosing Guide
+        <button type="button" class="pdf-btn" id="catalog-tab-btn" onclick="toggleCatalogMenu()">
+            📄 View Catalog Info & Dosing Guide <span id="tab-arrow">▼</span>
         </button>
+        <div class="catalog-dropdown" id="catalog-dropdown">
+            <a href="https://github.com/protide/Protide-COA/blob/48e1e8bcc0c80fadf687a4c010dbc6a477147e40/catalog%20info.pdf" target="_blank" class="dropdown-item">
+                <span>📄 Catalog Info (PDF)</span>
+                <span>↗</span>
+            </a>
+            <a href="Super_Shred_Research_Protocol_v2.pdf" target="_blank" class="dropdown-item">
+                <span>📋 Super Shred Research Protocol & Dosing Guide (PDF)</span>
+                <span>↗</span>
+            </a>
+            <a href="Supershredinfo.jpg" target="_blank" class="dropdown-item">
+                <span>🖼️ Super Shred Info Sheet (Image)</span>
+                <span>↗</span>
+            </a>
+        </div>
     </div>
 
     <div class="catalog" id="catalog"></div>
@@ -556,30 +520,6 @@
     </div>
 </div>
 
-<!-- Modal Container for Documents -->
-<div class="modal-overlay" id="docModal">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h3>Catalog Info & Dosing Guides</h3>
-            <button type="button" class="close-btn" onclick="closeModal()">&times;</button>
-        </div>
-        <div class="modal-links">
-            <a href="https://github.com/protide/Protide-COA/blob/48e1e8bcc0c80fadf687a4c010dbc6a477147e40/catalog%20info.pdf" target="_blank" class="modal-link-item">
-                <span>📄 Catalog Info (PDF)</span>
-                <span>↗</span>
-            </a>
-            <a href="Super_Shred_Research_Protocol_v2.pdf" target="_blank" class="modal-link-item">
-                <span>📋 Super Shred Research Protocol & Dosing Guide (PDF)</span>
-                <span>↗</span>
-            </a>
-            <a href="Supershredinfo.jpg" target="_blank" class="modal-link-item">
-                <span>🖼️ Super Shred Info Sheet (Image)</span>
-                <span>↗</span>
-            </a>
-        </div>
-    </div>
-</div>
-
 <script>
     const products = [
         { id: 1, name: "Retatrutide 10mg 3ml vial", price: 100.00, outOfStock: false, comingSoon: false, image: "Rt10.png" },
@@ -595,23 +535,21 @@
     const quantities = {};
     products.forEach(product => { quantities[product.id] = 0; });
 
-    function openModal() {
-        document.getElementById('docModal').classList.add('active');
-    }
-
-    function closeModal() {
-        document.getElementById('docModal').classList.remove('active');
-    }
-
-    window.onclick = function(event) {
-        const modal = document.getElementById('docModal');
-        if (event.target === modal) {
-            closeModal();
+    function toggleCatalogMenu() {
+        const dropdown = document.getElementById('catalog-dropdown');
+        const arrow = document.getElementById('tab-arrow');
+        if (dropdown.classList.contains('show')) {
+            dropdown.classList.remove('show');
+            arrow.innerText = '▼';
+        } else {
+            dropdown.classList.add('show');
+            arrow.innerText = '▲';
         }
-    };
+    }
 
     function renderCatalog() {
         const catalogContainer = document.getElementById('catalog');
+        if (!catalogContainer) return;
         catalogContainer.innerHTML = '';
 
         products.forEach(product => {
@@ -628,13 +566,46 @@
 
             let imageHtml = '';
             if (product.image) {
-                imageHtml = `<div class="product-image"><img src="${product.image}" alt="${product.name}"></div>`;
+                imageHtml = `<div class="product-image"><img src="${product.image}" alt="${product.name}" onerror="this.parentElement.style.display='none';"></div>`;
             }
 
             const isDisabled = product.outOfStock || product.comingSoon;
+            const currentQty = quantities[product.id] || 0;
 
             card.innerHTML = `
                 ${imageHtml}
                 <div class="product-info">
                     <div class="product-title">${product.name}</div>
-                    ${st
+                    ${statusHtml}
+                </div>
+                <div class="quantity-control">
+                    <button type="button" class="btn-qty" onclick="updateQty(${product.id}, -1)" ${isDisabled ? 'disabled' : ''}>-</button>
+                    <span class="qty-value" id="qty-${product.id}">${currentQty}</span>
+                    <button type="button" class="btn-qty" onclick="updateQty(${product.id}, 1)" ${isDisabled ? 'disabled' : ''}>+</button>
+                </div>
+            `;
+            catalogContainer.appendChild(card);
+        });
+    }
+
+    function updateQty(id, change) {
+        const product = products.find(p => p.id === id);
+        if (product && (product.outOfStock || product.comingSoon)) return;
+
+        if (quantities[id] + change >= 0) {
+            quantities[id] += change;
+            const qtyElement = document.getElementById(`qty-${id}`);
+            if (qtyElement) qtyElement.innerText = quantities[id];
+            calculateTotal();
+        }
+    }
+
+    function calculateTotal() {
+        let total = 0;
+        let itemCount = 0;
+
+        products.forEach(product => {
+            if (!product.outOfStock && !product.comingSoon) {
+                total += (quantities[product.id] || 0) * product.price;
+                itemCount += (quantities[product.id] || 0);
+           
