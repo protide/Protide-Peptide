@@ -109,9 +109,7 @@
 
         .pdf-button-wrapper {
             padding: 15px 25px 0;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
+            text-align: center;
         }
 
         .pdf-btn {
@@ -128,12 +126,99 @@
             font-size: 14px;
             font-weight: 600;
             text-decoration: none;
+            cursor: pointer;
             transition: all 0.2s ease;
         }
 
         .pdf-btn:hover {
             background-color: var(--accent-color);
             color: #0f172a;
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(4px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            width: 100%;
+            max-width: 480px;
+            padding: 24px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+            position: relative;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .modal-header h3 {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .close-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 24px;
+            cursor: pointer;
+            line-height: 1;
+        }
+
+        .close-btn:hover {
+            color: var(--text-primary);
+        }
+
+        .modal-links {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .modal-link-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 16px;
+            background-color: rgba(15, 23, 42, 0.6);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            color: var(--text-primary);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+        .modal-link-item:hover {
+            border-color: var(--accent-color);
+            background-color: rgba(56, 189, 248, 0.1);
+            color: var(--accent-color);
         }
 
         .catalog {
@@ -420,13 +505,11 @@
         🚚 Standard Delivery Time: <strong>3 – 5 Days</strong>
     </div>
 
+    <!-- Existing Tab Button -->
     <div class="pdf-button-wrapper">
-        <a href="https://github.com/protide/Protide-COA/blob/48e1e8bcc0c80fadf687a4c010dbc6a477147e40/catalog%20info.pdf" target="_blank" class="pdf-btn">
-            📄 View Catalog Info (PDF)
-        </a>
-        <a href="Super_Shred_Research_Protocol_v2.pdf" target="_blank" class="pdf-btn">
-            📋 View Super Shred Dosing Guide (PDF)
-        </a>
+        <button type="button" class="pdf-btn" onclick="openModal()">
+            📄 View Catalog Info & Dosing Guide
+        </button>
     </div>
 
     <div class="catalog" id="catalog"></div>
@@ -473,13 +556,37 @@
     </div>
 </div>
 
+<!-- Modal Container for Documents -->
+<div class="modal-overlay" id="docModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>Catalog Info & Dosing Guides</h3>
+            <button type="button" class="close-btn" onclick="closeModal()">&times;</button>
+        </div>
+        <div class="modal-links">
+            <a href="https://github.com/protide/Protide-COA/blob/48e1e8bcc0c80fadf687a4c010dbc6a477147e40/catalog%20info.pdf" target="_blank" class="modal-link-item">
+                <span>📄 Catalog Info (PDF)</span>
+                <span>↗</span>
+            </a>
+            <a href="Super_Shred_Research_Protocol_v2.pdf" target="_blank" class="modal-link-item">
+                <span>📋 Super Shred Research Protocol & Dosing Guide (PDF)</span>
+                <span>↗</span>
+            </a>
+            <a href="Supershredinfo.jpg" target="_blank" class="modal-link-item">
+                <span>🖼️ Super Shred Info Sheet (Image)</span>
+                <span>↗</span>
+            </a>
+        </div>
+    </div>
+</div>
+
 <script>
     const products = [
         { id: 1, name: "Retatrutide 10mg 3ml vial", price: 100.00, outOfStock: false, comingSoon: false, image: "Rt10.png" },
         { id: 2, name: "Retatrutide 20mg 3ml vial", price: 180.00, outOfStock: false, comingSoon: false, image: "Rt20.png" },
         { id: 3, name: "Klow 80mg vial", price: 200.00, outOfStock: false, comingSoon: false, image: "klow.png" },
         { id: 4, name: "Tesamorelin 10mg + Ipamoralin 5mg blend vial 15mg", price: 200.00, outOfStock: false, comingSoon: false, image: "tesa+ipa.png" },
-        { id: 5, name: "Super Shred 10ml vial", price: 140.00, outOfStock: false, comingSoon: true, image: "Supershredinfo.jpg" },
+        { id: 5, name: "Super Shred 10ml vial", price: 140.00, outOfStock: false, comingSoon: true, image: "Supershred.jpg" },
         { id: 6, name: "Bacteriostatic Water 3ml vial", price: 10.00, outOfStock: false, comingSoon: false, image: "bacteriostaticW.png" },
         { id: 7, name: "Kit A (5x 1ml Syringe 31G 6mm, 1x 3ml Syringe 25G, 7x Alcohol Swab 70%)", price: 8.00, outOfStock: false, comingSoon: false, image: "" },
         { id: 8, name: "Kit B (14x 1ml Syringe 31G 6mm, 2x 3ml Syringe 25G, 18x Alcohol Swab 70%)", price: 15.00, outOfStock: false, comingSoon: false, image: "" }
@@ -487,6 +594,21 @@
 
     const quantities = {};
     products.forEach(product => { quantities[product.id] = 0; });
+
+    function openModal() {
+        document.getElementById('docModal').classList.add('active');
+    }
+
+    function closeModal() {
+        document.getElementById('docModal').classList.remove('active');
+    }
+
+    window.onclick = function(event) {
+        const modal = document.getElementById('docModal');
+        if (event.target === modal) {
+            closeModal();
+        }
+    };
 
     function renderCatalog() {
         const catalogContainer = document.getElementById('catalog');
@@ -515,88 +637,4 @@
                 ${imageHtml}
                 <div class="product-info">
                     <div class="product-title">${product.name}</div>
-                    ${statusHtml}
-                </div>
-                <div class="quantity-control">
-                    <button type="button" class="btn-qty" onclick="updateQty(${product.id}, -1)" ${isDisabled ? 'disabled' : ''}>-</button>
-                    <span class="qty-value" id="qty-${product.id}">0</span>
-                    <button type="button" class="btn-qty" onclick="updateQty(${product.id}, 1)" ${isDisabled ? 'disabled' : ''}>+</button>
-                </div>
-            `;
-            catalogContainer.appendChild(card);
-        });
-    }
-
-    function updateQty(id, change) {
-        const product = products.find(p => p.id === id);
-        if (product && (product.outOfStock || product.comingSoon)) return;
-
-        if (quantities[id] + change >= 0) {
-            quantities[id] += change;
-            document.getElementById(`qty-${id}`).innerText = quantities[id];
-            calculateTotal();
-        }
-    }
-
-    function calculateTotal() {
-        let total = 0;
-        let itemCount = 0;
-
-        products.forEach(product => {
-            if (!product.outOfStock && !product.comingSoon) {
-                total += quantities[product.id] * product.price;
-                itemCount += quantities[product.id];
-            }
-        });
-
-        document.getElementById('total-price').innerText = `$${total.toFixed(2)}`;
-
-        const name = document.getElementById('cust-name').value.trim();
-        const phone = document.getElementById('cust-phone').value.trim();
-        const address = document.getElementById('cust-address').value.trim();
-
-        const isValid = itemCount > 0 && name !== "" && phone !== "" && address !== "";
-        document.getElementById('checkout-btn').disabled = !isValid;
-    }
-
-    function sendOrder() {
-        const name = document.getElementById('cust-name').value.trim();
-        const phone = document.getElementById('cust-phone').value.trim();
-        const address = document.getElementById('cust-address').value.trim();
-
-        let orderSummary = "🛒 NEW ORDER - PROTIDE PEPTIDES\n";
-        orderSummary += "-------------------------------\n";
-        orderSummary += `👤 Name: ${name}\n`;
-        orderSummary += `📞 Contact: ${phone}\n`;
-        orderSummary += `📍 Address: ${address}\n`;
-        orderSummary += `🚚 Est. Delivery: 3-5 Business Days\n`;
-        orderSummary += "-------------------------------\n";
-        orderSummary += "ITEMS ORDERED:\n";
-
-        let total = 0;
-
-        products.forEach(product => {
-            const qty = quantities[product.id];
-            if (qty > 0 && !product.outOfStock && !product.comingSoon) {
-                const itemSubtotal = qty * product.price;
-                total += itemSubtotal;
-                orderSummary += `• ${product.name}\n  Qty: ${qty} x $${product.price.toFixed(2)} = $${itemSubtotal.toFixed(2)}\n`;
-            }
-        });
-
-        orderSummary += "-------------------------------\n";
-        orderSummary += `💰 Total Amount: $${total.toFixed(2)}`;
-        orderSummary += `\n\n📸 (Payment screenshot attached below)`;
-
-        const telegramHandle = "Papapepprotide";
-        const encodedText = encodeURIComponent(orderSummary);
-        const telegramUrl = `https://t.me/${telegramHandle}?text=${encodedText}`;
-
-        window.open(telegramUrl, '_blank');
-    }
-
-    renderCatalog();
-</script>
-
-</body>
-</html>
+                    ${st
