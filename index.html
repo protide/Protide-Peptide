@@ -16,7 +16,6 @@
             --border-color: #334155;
             --paynow-color: #7b1fa2;
             --out-of-stock-color: #f43f5e;
-            --coming-soon-color: #f59e0b;
         }
 
         * {
@@ -151,11 +150,15 @@
             transition: all 0.2s ease;
         }
 
+        .product-card.no-image {
+            grid-template-columns: 1fr auto;
+        }
+
         .product-card:hover {
             border-color: var(--accent-color);
         }
 
-        .product-card.disabled-item {
+        .product-card.out-of-stock {
             opacity: 0.6;
             border-color: var(--border-color);
         }
@@ -199,14 +202,6 @@
             font-size: 12px;
             font-weight: 600;
             color: var(--out-of-stock-color);
-            text-transform: uppercase;
-            margin-top: 2px;
-        }
-
-        .coming-soon-badge {
-            font-size: 12px;
-            font-weight: 600;
-            color: var(--coming-soon-color);
             text-transform: uppercase;
             margin-top: 2px;
         }
@@ -466,14 +461,14 @@
 
 <script>
     const products = [
-        { id: 1, name: "Retatrutide 10mg 3ml vial", price: 100.00, outOfStock: false, comingSoon: false, image: "Rt10.png" },
-        { id: 2, name: "Retatrutide 20mg 3ml vial", price: 180.00, outOfStock: false, comingSoon: false, image: "Rt20.png" },
-        { id: 3, name: "Klow 80mg vial", price: 200.00, outOfStock: false, comingSoon: false, image: "klow.png" },
-        { id: 4, name: "Tesamorelin 10mg + Ipamoralin 5mg blend vial 15mg", price: 200.00, outOfStock: false, comingSoon: false, image: "tesa+ipa.png" },
-        { id: 5, name: "Super Shred", price: 140.00, outOfStock: false, comingSoon: true, image: "Supershred.jpg" },
-        { id: 6, name: "Bacteriostatic Water 3ml vial", price: 10.00, outOfStock: false, comingSoon: false, image: "bacteriostaticW.png" },
-        { id: 7, name: "Kit A (5x 1ml Syringe 31G 6mm, 1x 3ml Syringe 25G, 7x Alcohol Swab 70%)", price: 8.00, outOfStock: false, comingSoon: false, image: "kitA.png" },
-        { id: 8, name: "Kit B (14x 1ml Syringe 31G 6mm, 2x 3ml Syringe 25G, 18x Alcohol Swab 70%)", price: 15.00, outOfStock: false, comingSoon: false, image: "kitB.png" }
+        { id: 1, name: "Retatrutide 10mg 3ml vial", price: 100.00, outOfStock: false, image: "Rt10.png" },
+        { id: 2, name: "Retatrutide 20mg 3ml vial", price: 180.00, outOfStock: false, image: "Rt20.png" },
+        { id: 3, name: "Klow 80mg vial", price: 200.00, outOfStock: false, image: "klow.png" },
+        { id: 4, name: "Tesamorelin 10mg + Ipamoralin 5mg blend vial 15mg", price: 200.00, outOfStock: false, image: "tesa+ipa.png" },
+        { id: 5, name: "Super Shred", price: 140.00, outOfStock: false, image: "1000245036.jpg" },
+        { id: 6, name: "Bacteriostatic Water 3ml vial", price: 10.00, outOfStock: false, image: "bacteriostaticW.png" },
+        { id: 7, name: "Kit A (5x 1ml Syringe 31G 6mm, 1x 3ml Syringe 25G, 7x Alcohol Swab 70%)", price: 8.00, outOfStock: false, image: "" },
+        { id: 8, name: "Kit B (14x 1ml Syringe 31G 6mm, 2x 3ml Syringe 25G, 18x Alcohol Swab 70%)", price: 15.00, outOfStock: false, image: "" }
     ];
 
     const quantities = {};
@@ -484,19 +479,15 @@
         catalogContainer.innerHTML = '';
 
         products.forEach(product => {
-            const isDisabled = product.outOfStock || product.comingSoon;
             const card = document.createElement('div');
-            card.className = `product-card ${isDisabled ? 'disabled-item' : ''}`;
+            card.className = `product-card ${product.outOfStock ? 'out-of-stock' : ''} ${!product.image ? 'no-image' : ''}`;
 
-            let statusHtml = `<div class="product-price">$${product.price.toFixed(2)}</div>`;
-            if (product.comingSoon) {
-                statusHtml = `<div class="coming-soon-badge">Coming Soon</div>`;
-            } else if (product.outOfStock) {
-                statusHtml = `<div class="stock-badge">Out of Stock</div>`;
-            }
+            const stockStatus = product.outOfStock
+                ? `<div class="stock-badge">Out of Stock</div>`
+                : `<div class="product-price">$${product.price.toFixed(2)}</div>`;
 
-            let imageHtml = '<div class="product-image placeholder"></div>';
-            if(product.image) {
+            let imageHtml = '';
+            if (product.image) {
                 imageHtml = `<div class="product-image"><img src="${product.image}" alt="${product.name}"></div>`;
             }
 
@@ -504,12 +495,12 @@
                 ${imageHtml}
                 <div class="product-info">
                     <div class="product-title">${product.name}</div>
-                    ${statusHtml}
+                    ${stockStatus}
                 </div>
                 <div class="quantity-control">
-                    <button type="button" class="btn-qty" onclick="updateQty(${product.id}, -1)" ${isDisabled ? 'disabled' : ''}>-</button>
+                    <button type="button" class="btn-qty" onclick="updateQty(${product.id}, -1)" ${product.outOfStock ? 'disabled' : ''}>-</button>
                     <span class="qty-value" id="qty-${product.id}">0</span>
-                    <button type="button" class="btn-qty" onclick="updateQty(${product.id}, 1)" ${isDisabled ? 'disabled' : ''}>+</button>
+                    <button type="button" class="btn-qty" onclick="updateQty(${product.id}, 1)" ${product.outOfStock ? 'disabled' : ''}>+</button>
                 </div>
             `;
             catalogContainer.appendChild(card);
@@ -518,7 +509,7 @@
 
     function updateQty(id, change) {
         const product = products.find(p => p.id === id);
-        if (product && (product.outOfStock || product.comingSoon)) return;
+        if (product && product.outOfStock) return;
 
         if (quantities[id] + change >= 0) {
             quantities[id] += change;
@@ -532,7 +523,7 @@
         let itemCount = 0;
 
         products.forEach(product => {
-            if (!product.outOfStock && !product.comingSoon) {
+            if (!product.outOfStock) {
                 total += quantities[product.id] * product.price;
                 itemCount += quantities[product.id];
             }
@@ -566,7 +557,7 @@
 
         products.forEach(product => {
             const qty = quantities[product.id];
-            if (qty > 0 && !product.outOfStock && !product.comingSoon) {
+            if (qty > 0 && !product.outOfStock) {
                 const itemSubtotal = qty * product.price;
                 total += itemSubtotal;
                 orderSummary += `• ${product.name}\n  Qty: ${qty} x $${product.price.toFixed(2)} = $${itemSubtotal.toFixed(2)}\n`;
