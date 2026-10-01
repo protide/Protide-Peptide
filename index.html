@@ -196,6 +196,27 @@
             margin-bottom: 4px;
         }
 
+        .product-items-list {
+            list-style: none;
+            padding: 0;
+            margin: 6px 0 8px 0;
+        }
+
+        .product-items-list li {
+            font-size: 12px;
+            color: var(--text-secondary);
+            line-height: 1.4;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .product-items-list li::before {
+            content: "•";
+            color: var(--accent-color);
+            font-size: 14px;
+        }
+
         .product-price {
             font-size: 14px;
             color: var(--accent-color);
@@ -429,7 +450,7 @@
             📄 Super Shred Research Protocol (PDF)
         </a>
         <a href="Supershredinfo.jpg" target="_blank" class="pdf-btn">
-            🖼️ Super Shred Info Sheet (Image)
+            🖼️️ Super Shred Info Sheet (Image)
         </a>
     </div>
 
@@ -483,10 +504,34 @@
         { id: 2, name: "Retatrutide 20mg 3ml vial", price: 180.00, outOfStock: false, comingSoon: false, image: "Rt20.png" },
         { id: 3, name: "Klow 80mg vial", price: 200.00, outOfStock: false, comingSoon: false, image: "klow.png" },
         { id: 4, name: "Tesamorelin 10mg + Ipamoralin 5mg blend vial 15mg", price: 200.00, outOfStock: false, comingSoon: false, image: "tesa+ipa.png" },
-        { id: 5, name: "Super Shred 10ml vial", price: 140.00, outOfStock: false, comingSoon: true, image: "Supershred.jpg" },
+        { id: 5, name: "Super Shred 10ml vial", price: 140.00, outOfStock: false, comingSoon: false, image: "Supershred.jpg" },
         { id: 6, name: "Bacteriostatic Water 3ml vial", price: 10.00, outOfStock: false, comingSoon: false, image: "bacteriostaticW.png" },
-        { id: 7, name: "Kit A (5x 1ml Syringe 31G 6mm, 1x 3ml Syringe 25G, 7x Alcohol Swab 70%)", price: 8.00, outOfStock: false, comingSoon: false, image: "" },
-        { id: 8, name: "Kit B (14x 1ml Syringe 31G 6mm, 2x 3ml Syringe 25G, 18x Alcohol Swab 70%)", price: 15.00, outOfStock: false, comingSoon: false, image: "" }
+        { 
+            id: 7, 
+            name: "Kit A", 
+            items: [
+                "5x 1ml Syringe 31G 6mm",
+                "1x 3ml Syringe 25G",
+                "7x Alcohol Swab 70%"
+            ],
+            price: 8.00, 
+            outOfStock: false, 
+            comingSoon: false, 
+            image: "" 
+        },
+        { 
+            id: 8, 
+            name: "Kit B", 
+            items: [
+                "10x 1ml Syringe 31G 6mm",
+                "2x 3ml Syringe 25G",
+                "14x Alcohol Swab 70%"
+            ],
+            price: 15.00, 
+            outOfStock: false, 
+            comingSoon: false, 
+            image: "" 
+        }
     ];
 
     const quantities = {};
@@ -513,12 +558,20 @@
                 imageHtml = `<div class="product-image"><img src="${product.image}" alt="${product.name}"></div>`;
             }
 
+            let itemsHtml = '';
+            if (product.items && product.items.length > 0) {
+                itemsHtml = `<ul class="product-items-list">
+                    ${product.items.map(item => `<li>${item}</li>`).join('')}
+                </ul>`;
+            }
+
             const isDisabled = product.outOfStock || product.comingSoon;
 
             card.innerHTML = `
                 ${imageHtml}
                 <div class="product-info">
                     <div class="product-title">${product.name}</div>
+                    ${itemsHtml}
                     ${statusHtml}
                 </div>
                 <div class="quantity-control">
