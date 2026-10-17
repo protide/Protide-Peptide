@@ -502,35 +502,35 @@
     const products = [
         { id: 1, name: "Retatrutide 10mg 3ml vial", price: 100.00, outOfStock: false, comingSoon: false, image: "Rt10.png" },
         { id: 2, name: "Retatrutide 20mg 3ml vial", price: 180.00, outOfStock: false, comingSoon: false, image: "Rt20.png" },
-        { id: 3, name: "Klow 80mg vial", price: 200.00, outOfStock: false, comingSoon: false, image: "klow.png" },
-        { id: 4, name: "Tesamorelin 10mg + Ipamoralin 5mg blend vial 15mg", price: 200.00, outOfStock: false, comingSoon: false, image: "tesa+ipa.png" },
+        { id: 3, name: "Klow 80mg vial", price: 150.00, outOfStock: false, comingSoon: false, image: "klow.png" },
+        { id: 4, name: "Tesamorelin 10mg + Ipamoralin 5mg blend vial 15mg", price: 150.00, outOfStock: false, comingSoon: false, image: "tesa+ipa.png" },
         { id: 5, name: "Super Shred 10ml vial", price: 140.00, outOfStock: false, comingSoon: false, image: "Supershred.jpg" },
         { id: 6, name: "Bacteriostatic Water 3ml vial", price: 10.00, outOfStock: false, comingSoon: false, image: "bacteriostaticW.png" },
-        { 
-            id: 7, 
-            name: "Kit A", 
+        {
+            id: 7,
+            name: "Kit A",
             items: [
                 "5x 1ml Syringe 31G 6mm",
                 "1x 3ml Syringe 25G",
                 "7x Alcohol Swab 70%"
             ],
-            price: 8.00, 
-            outOfStock: false, 
-            comingSoon: false, 
-            image: "" 
+            price: 8.00,
+            outOfStock: false,
+            comingSoon: false,
+            image: ""
         },
-        { 
-            id: 8, 
-            name: "Kit B", 
+        {
+            id: 8,
+            name: "Kit B",
             items: [
                 "10x 1ml Syringe 31G 6mm",
                 "2x 3ml Syringe 25G",
                 "14x Alcohol Swab 70%"
             ],
-            price: 15.00, 
-            outOfStock: false, 
-            comingSoon: false, 
-            image: "" 
+            price: 15.00,
+            outOfStock: false,
+            comingSoon: false,
+            image: ""
         }
     ];
 
@@ -625,35 +625,4 @@
         orderSummary += "-------------------------------\n";
         orderSummary += `👤 Name: ${name}\n`;
         orderSummary += `📞 Contact: ${phone}\n`;
-        orderSummary += `📍 Address: ${address}\n`;
-        orderSummary += `🚚 Est. Delivery: 3-5 Business Days\n`;
-        orderSummary += "-------------------------------\n";
-        orderSummary += "ITEMS ORDERED:\n";
-
-        let total = 0;
-
-        products.forEach(product => {
-            const qty = quantities[product.id];
-            if (qty > 0 && !product.outOfStock && !product.comingSoon) {
-                const itemSubtotal = qty * product.price;
-                total += itemSubtotal;
-                orderSummary += `• ${product.name}\n  Qty: ${qty} x $${product.price.toFixed(2)} = $${itemSubtotal.toFixed(2)}\n`;
-            }
-        });
-
-        orderSummary += "-------------------------------\n";
-        orderSummary += `💰 Total Amount: $${total.toFixed(2)}`;
-        orderSummary += `\n\n📸 (Payment screenshot attached below)`;
-
-        const telegramHandle = "Papapepprotide";
-        const encodedText = encodeURIComponent(orderSummary);
-        const telegramUrl = `https://t.me/${telegramHandle}?text=${encodedText}`;
-
-        window.open(telegramUrl, '_blank');
-    }
-
-    renderCatalog();
-</script>
-
-</body>
-</html>
+        orderSummary += `📍 Address: ${address}
